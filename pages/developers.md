@@ -61,7 +61,7 @@ Use the library to answer "what did past teams already learn?"
 
 ### Share fixes across teams
 
-Submit lessons with citations so others do not repeat the same errors.
+Submit lessons with citations so others avoid repeating the same errors.
 
 ---
 

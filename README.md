@@ -12,7 +12,7 @@ This repository contains the portfolio site for **PROVES Kit Agent**, an open so
 
 Two linked systems:
 
-- Living documentation library (MCP-backed, citations and excerpts only)
+- Living documentation library (MCP-backed, citations and excerpts)
 - IDE risk scan extension for mission-critical issues
 
 This repository is an open source scrapbook for the concept and documentation. The working implementation will live in a separate repository.
@@ -26,7 +26,7 @@ This repository is an open source scrapbook for the concept and documentation. T
 - F Prime documentation: https://fprime.jpl.nasa.gov/latest/docs/
 
 **Operational knowledge**
-- Open source repos (citations and excerpts only)
+- Open source repos (citations and excerpts)
 
 ## Portfolio Structure
 

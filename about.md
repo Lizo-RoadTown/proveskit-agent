@@ -20,7 +20,7 @@ Two linked systems:
 1) An open source, MCP-backed living documentation library
 2) A repo risk assessment extension that checks repos and links to fixes
 
-The system owns outcomes. The library stores citations and excerpts, not attribution or fault.
+The system owns outcomes. The library is citation-based and artifact-linked.
 
 ---
 
@@ -34,7 +34,7 @@ The system owns outcomes. The library stores citations and excerpts, not attribu
 
 **Then it is curated and delivered:**
 
-- Storage: citations and excerpts only, reviewed before inclusion
+- Storage: citations and excerpts, reviewed before inclusion
 - Access: MCP server for any AI tool
 - Action: IDE risk scan extension for daily checks
 
@@ -42,10 +42,10 @@ The system owns outcomes. The library stores citations and excerpts, not attribu
 
 ## Why an Interrogatable Library
 
-The problem is not a lack of documentation. It is fragmentation:
+The problem is fragmentation, even with abundant documentation:
 
 - Inside repos, knowledge splits across issues, code, and tests
-- Across teams, fixes are not shared in a usable way
+- Across teams, fixes are shared inconsistently
 - Across sources, build, software, and ops guidance are separated
 
 The library makes those fragments searchable as one system.

@@ -71,7 +71,7 @@ The curation system ties these fragments to a single search and citation layer.
 
 - Markdown entries with small metadata blocks
 - Review before merge
-- Citations and excerpts only
+- Citations and excerpts
 
 This repo is the system of record and keeps the library transparent and open source.
 
@@ -119,7 +119,7 @@ Entry
 - Verification reference:
 ```
 
-The system owns outcomes. The library stores citations and excerpts, not attribution or fault.
+The system owns outcomes. Entries focus on citations, excerpts, and artifact links.
 
 ---
 

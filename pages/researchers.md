@@ -44,8 +44,8 @@ It centers on fragmentation as the core failure mode: disconnected issues, code,
 
 - PROVES documentation
 - F Prime documentation
-- Open source repos (citations and excerpts only)
-- Risk scan outputs (anonymized, no names)
+- Open source repos (citations and excerpts)
+- Risk scan outputs with identifiers removed
 
 ---
 
@@ -58,12 +58,11 @@ It centers on fragmentation as the core failure mode: disconnected issues, code,
 
 ---
 
-## Ethics
+## Data Scope
 
-- Non-attributive logging
-- No personal performance tracking
-- Open source materials only
-- Citations and excerpts only
+- Pattern-level signals
+- Open source materials
+- Citations and excerpts
 
 ---
 

@@ -25,11 +25,11 @@ article_header:
 Right now the knowledge needed to build and operate these systems is fragmented:
 
 - **Within a single repo**: design intent lives in issues, fixes live in commits, and tests live elsewhere.
-- **Across teams**: each group solves the same problems with no shared memory.
+- **Across teams**: each group solves the same problems in isolation.
 - **Across sources**: PROVES hardware guidance, F Prime architecture, and operational fixes are in different places.
 - **Across time**: decisions fade when people rotate or projects pause.
 
-An interrogatable library is the only way to treat all of that as one system instead of disconnected fragments.
+An interrogatable library turns that into one system instead of disconnected fragments.
 
 ## What It Does
 
@@ -58,7 +58,7 @@ graph TB
   MCP --> AI[AI tools]
 ```
 
-- Sources are indexed as citations and excerpts only
+- Sources are indexed as citations and excerpts
 - The PROVES Agentic Curation System normalizes entries and maintains citations
 - Entries are reviewed before inclusion in the open source library
 - The MCP server exposes the library for search and retrieval

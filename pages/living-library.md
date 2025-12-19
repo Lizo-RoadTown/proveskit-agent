@@ -9,7 +9,7 @@ key: page-living-library
 
 The PROVES Kit Agent now includes a deeper layer of "living" documentation that users can interrogate beyond the first-layer docs.
 
-The core idea is simple: the structure owns outcomes, not individuals. The library stores citations and excerpts, not attribution or fault.
+The core idea is simple: the structure owns outcomes. Entries are citation-based and artifact-linked.
 
 ---
 
@@ -18,7 +18,7 @@ The core idea is simple: the structure owns outcomes, not individuals. The libra
 Knowledge is fragmented in predictable ways:
 
 - **Inside repos**: issues, commits, and tests each hold part of the story.
-- **Across teams**: the same failures repeat because fixes are not shared.
+- **Across teams**: the same failures repeat because fixes are shared inconsistently.
 - **Across sources**: PROVES hardware guidance, F Prime architecture, and ops fixes are separated.
 - **Across time**: context fades when teams rotate or projects pause.
 
@@ -50,8 +50,8 @@ The implementation will live in its own repository (TBD), separate from this scr
 
 ## Source Policy
 
-- Open source materials only
-- Citations and excerpts only
+- Open source materials
+- Citations and excerpts
 - Reviewed before inclusion
 
 This keeps the library open, verifiable, and safe to share.
@@ -75,7 +75,7 @@ Users can run a daily or per-commit risk scan in an IDE:
 3. It surfaces likely mission-critical issues with links to fixes.
 4. It can contribute new patterns or lessons back to the library.
 
-No attribution. Only cited knowledge.
+Entries are citation-based.
 
 ---
 

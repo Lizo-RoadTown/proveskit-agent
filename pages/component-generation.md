@@ -394,28 +394,6 @@ After receiving generated component:
 
 ---
 
-## Limitations
-
-**Agent cannot:**
-- Implement hardware-specific code (BSP, drivers)
-- Design complex algorithms (must provide pseudocode)
-- Determine optimal thread allocation
-- Validate flight safety requirements
-
-**Agent helps with:**
-- Boilerplate F'Prime code
-- Interface definitions
-- Documentation structure
-- Test scaffolding
-
-**Human must:**
-- Review all generated code
-- Implement business logic
-- Validate against requirements
-- Perform integration testing
-
----
-
 ## Examples
 
 ### Example 1: GPS Receiver
