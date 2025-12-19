@@ -20,7 +20,7 @@ Two linked systems:
 1) An open source, MCP-backed living documentation library
 2) A repo risk assessment extension that checks repos and links to fixes
 
-The system owns outcomes. We log where the fix lives, not who caused the problem.
+The system owns outcomes. The library stores citations and excerpts, not attribution or fault.
 
 ---
 

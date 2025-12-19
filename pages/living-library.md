@@ -9,7 +9,7 @@ key: page-living-library
 
 The PROVES Kit Agent now includes a deeper layer of "living" documentation that users can interrogate beyond the first-layer docs.
 
-The core idea is simple: the structure owns outcomes, not individuals. We log where the fix lives, not who caused it.
+The core idea is simple: the structure owns outcomes, not individuals. The library stores citations and excerpts, not attribution or fault.
 
 ---
 
@@ -75,19 +75,19 @@ Users can run a daily or per-commit risk scan in an IDE:
 3. It surfaces likely mission-critical issues with links to fixes.
 4. It can contribute new patterns or lessons back to the library.
 
-No names. No blame. Only system knowledge.
+No attribution. Only cited knowledge.
 
 ---
 
-## Lesson Entry Format (No Blame)
+## Lesson Entry Format (Citations)
 
 ```
-Issue
-- What happened:
-- Where it lives (component/repo/doc):
-- Likely knowledge location (file/test/doc/role):
-- Fix summary:
-- How to verify:
+Entry
+- Observed context:
+- Source citation(s):
+- Related artifacts (component/repo/doc):
+- Resolution notes (if documented):
+- Verification reference:
 ```
 
 ---

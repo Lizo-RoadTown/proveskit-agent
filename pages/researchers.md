@@ -19,7 +19,7 @@ It centers on fragmentation as the core failure mode: disconnected issues, code,
 
 - Does a shared, searchable library reduce repeated failures?
 - What types of lessons get reused across teams and projects?
-- How does no-blame logging affect participation?
+- How does non-attributive logging affect participation?
 
 ### 2) Risk Detection
 
@@ -60,7 +60,7 @@ It centers on fragmentation as the core failure mode: disconnected issues, code,
 
 ## Ethics
 
-- No blame logging
+- Non-attributive logging
 - No personal performance tracking
 - Open source materials only
 - Citations and excerpts only

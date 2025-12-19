@@ -108,18 +108,18 @@ New patterns can be submitted back to the library for review.
 
 ---
 
-## Entry Format (No Blame)
+## Entry Format (Citations)
 
 ```
-Issue
-- What happened:
-- Where it lives (component/repo/doc):
-- Likely knowledge location (file/test/doc/role):
-- Fix summary:
-- How to verify:
+Entry
+- Observed context:
+- Source citation(s):
+- Related artifacts (component/repo/doc):
+- Resolution notes (if documented):
+- Verification reference:
 ```
 
-The system owns outcomes. We log where the fix lives, not who caused the problem.
+The system owns outcomes. The library stores citations and excerpts, not attribution or fault.
 
 ---
 
