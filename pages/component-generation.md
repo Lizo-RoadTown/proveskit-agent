@@ -1,11 +1,13 @@
 ---
 layout: article
-title: Component Generation
+title: Component Generation (Archive)
 permalink: /component-generation/
 key: page-component-generation
 ---
 
 # F'Prime Component Generation
+
+**Archive note:** This page captures early concept work. The current project focus is the MCP-backed living documentation library and the repo risk scan extension.
 
 The Component Generator agent creates F'Prime components from natural language specifications.
 
@@ -455,4 +457,4 @@ After receiving generated component:
 
 - Try generating your first component: [For Developers →](/proveskit-agent/developers/)
 - Understand the technical details: [Architecture →](/proveskit-agent/technical/)
-- See documentation capabilities: [Documentation Support →](/proveskit-agent/documentation/)
+- See the living library: [Living Documentation Library](/proveskit-agent/living-library/)

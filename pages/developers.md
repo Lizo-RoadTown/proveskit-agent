@@ -5,240 +5,73 @@ permalink: /developers/
 key: page-developers
 ---
 
-# PROVES Kit Agent for F'Prime Developers
+# PROVES Kit Agent for Developers
 
-If you're building CubeSat flight software with F'Prime, the PROVES Kit Agent can accelerate your development workflow.
+This project is not a code generator. It is a living documentation system plus a repo risk scan.
 
 ---
 
 ## Quick Start
 
-### Component Generation
+### 1) Use the Living Library
 
-Describe what you need in natural language:
+Search the MCP-backed library for:
+- Known issues and fixes
+- Risk patterns and how to verify
+- Links to source artifacts
 
-**Example:**
-> "Create a temperature sensor component that reads telemetry every 5 seconds, has a command to trigger immediate reading, and emits an event when temperature exceeds threshold."
+[Living Documentation Library](https://lizo-roadtown.github.io/proveskit-agent/living-library/)
 
-**Agent generates:**
-- `.fpp` component definition with ports, commands, telemetry, events
-- C++ implementation scaffold with TODO markers
-- Unit test framework
-- Component documentation
+### 2) Run the Risk Scan
 
-### Documentation Support
+Use the VS Code extension to scan your repo:
 
-Point the agent at your component:
-
-**Agent drafts:**
-- Interface Control Document (ICD)
-- Command dictionary
-- Telemetry table
-- Event catalog
-
-### Code Review
-
-Submit your component for review:
-
-**Agent checks:**
-- Port connections and types
-- F'Prime coding patterns
-- Thread safety in handlers
-- Missing documentation
+- Pulls risk patterns from the MCP library
+- Flags likely mission-critical issues
+- Links to fixes and validation steps
 
 ---
 
-## Workflow Integration
+## Daily Workflow
 
-### 1. Requirements to Component
-
-```bash
-# Describe your component
-agent generate-component "Temperature monitor with threshold alerts"
-
-# Review generated .fpp
-# Edit C++ implementation
-# Run fprime-util build
-```
-
-### 2. Component to Documentation
-
-```bash
-# Generate docs from component
-agent document TempSensorComponent.fpp
-
-# Review and refine
-# Commit to repository
-```
-
-### 3. Pre-Commit Review
-
-```bash
-# Before committing
-agent review TempSensorComponent.cpp
-
-# Address findings
-# Re-run review
-```
-
-### 4. Daily Risk Scan (VS Code Extension)
-
-```bash
-# Run daily scan from VS Code
-# Extension queries MCP library for risk patterns
-# Reports likely mission-critical issues with fixes
-```
-
-### 5. Living Documentation Library
-
-Use the MCP-backed library to search past lessons and fixes:
-
-- Query by component name or subsystem
-- Follow links to code, docs, and tests
-- Reuse verified fixes and validation steps
-
-[Living Documentation Library](https://lizo-roadtown.github.io/proveskit-agent/living-library/)
+1) Run the risk scan at the end of each day
+2) Review flagged issues and apply fixes
+3) Verify with tests or checklists
+4) Submit new patterns or lessons for review
 
 ---
 
 ## Common Use Cases
 
-### New Component Development
+### Prevent regressions
 
-**Scenario:** You need a new component for payload data handling.
+Find issues before they become mission-critical by checking known risk patterns.
 
-**Agent assists:**
-1. Draft component specification from requirements
-2. Generate `.fpp` definition
-3. Scaffold C++ implementation
-4. Create unit test template
-5. Draft interface documentation
+### Onboard new members
 
-### Topology Design
+Use the library to answer "what did past teams already learn?"
 
-**Scenario:** Connecting components in deployment topology.
+### Share fixes across universities
 
-**Agent assists:**
-1. Suggest port connections based on data flow
-2. Validate connection types
-3. Identify missing connections
-4. Generate topology documentation
-
-### Onboarding New Developers
-
-**Scenario:** New team member needs to understand existing components.
-
-**Agent assists:**
-1. Explain component purpose and design
-2. Identify key interfaces and dependencies
-3. Suggest where to start modifications
-4. Point to relevant F'Prime documentation
-
-### Documentation Maintenance
-
-**Scenario:** Component changed, docs are out of sync.
-
-**Agent assists:**
-1. Detect changes in component definition
-2. Update command/telemetry tables
-3. Regenerate interface documentation
-4. Flag breaking changes
-
-### Risk Scan and Lessons
-
-**Scenario:** You want to avoid mission-critical regressions.
-
-**Agent assists:**
-1. Pull risk patterns from the MCP library
-2. Scan the repo for matches
-3. Link to verified fixes and tests
-4. Publish new patterns when a fix is confirmed
+Submit lessons with citations so other teams do not repeat the same errors.
 
 ---
 
-## What the Agent Does NOT Do
+## What This Does Not Do
 
-**Important limitations:**
+- It does not generate flight software
+- It does not auto-fix code
+- It does not log blame or personal fault
 
-- **No flight certification** — Agent-generated code requires human review and testing
-- **No autonomous deployment** — All generated code must be validated before flight
-- **No hardware integration** — Agent doesn't configure BSP or hardware drivers
-- **No mission-critical decisions** — Design choices require human oversight
-
-The agent is a **development assistant**, not a replacement for engineering judgment.
+The system owns outcomes. The library stores where fixes live.
 
 ---
 
-## Best Practices
-
-### 1. Iterative Refinement
-
-Don't expect perfect output first try:
-- Generate initial component
-- Review and identify issues
-- Refine requirements and regenerate
-- Iterate until satisfactory
-
-### 2. Human-in-the-Loop
-
-Always review agent output:
-- Verify port connections make sense
-- Check command/telemetry definitions
-- Validate event logic
-- Review generated tests
-
-### 3. Version Control
-
-Commit agent-generated code separately:
-- Initial generation → commit
-- Human refinements → separate commit
-- Makes it clear what's generated vs. manual
-
-### 4. Documentation First
-
-Start with clear requirements:
-- What does the component do?
-- What are the interfaces?
-- What are the edge cases?
-
-Better requirements → better agent output.
-
----
-
-## F'Prime Resources
-
-**Official Documentation:**
-- [F'Prime User Manual](https://fprime.jpl.nasa.gov/devel/docs/user-manual/framework)
-- [F'Prime Tutorials](https://fprime.jpl.nasa.gov/devel/docs/tutorials/)
-- [Component Development Guide](https://fprime.jpl.nasa.gov/devel/docs/design/component-design.html)
+## Resources
 
 **PROVES Kit:**
-- [PROVES Kit GitHub](https://github.com/proveskit)
-- Component examples and templates
+- https://github.com/proveskit
 
----
+**F Prime:**
+- https://fprime.jpl.nasa.gov/
 
-## Getting Help
-
-**Agent Issues:**
-- File issues on the agent repository
-- Include component specifications and error messages
-
-**F'Prime Questions:**
-- [F'Prime Community Forum](https://github.com/nasa/fprime/discussions)
-- PROVES Kit Slack (for collaborators)
-
-**PROVES Kit:**
-- [GitHub Issues](https://github.com/proveskit)
-- Contact team leads at partner universities
-
----
-
-## Next Steps
-
-Explore specific agent capabilities:
-
-- [Component Generation →](/proveskit-agent/component-generation/)
-- [Documentation Support →](/proveskit-agent/documentation/)
-- [Code Review →](/proveskit-agent/code-review/)
-- [Technical Architecture →](/proveskit-agent/technical/)

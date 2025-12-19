@@ -8,8 +8,8 @@ url     : https://lizo-roadtown.github.io
 baseurl : /proveskit-agent
 title   : PROVES Kit Agent
 description: >
-  Agentic AI for F'Prime Flight Software Development.
-  Intelligent agents supporting CubeSat mission engineering workflows.
+  Living documentation library and repo risk scanning for CubeSat teams.
+  MCP-backed access to PROVES and F Prime knowledge.
 
 ## => Language and Timezone
 ##############################

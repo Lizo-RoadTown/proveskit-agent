@@ -1,22 +1,21 @@
 # PROVES Kit Agent
 
-Agentic AI for F'Prime Flight Software Development
+Living documentation and repo risk scanning for CubeSat teams
 
 ## Overview
 
-This repository contains the portfolio site for **PROVES Kit Agent**, an intelligent assistant system designed to support CubeSat mission engineers working with NASA's F'Prime flight software framework.
+This repository contains the portfolio site for **PROVES Kit Agent**, a public MCP-backed knowledge system and repo risk scan concept for university CubeSat teams.
 
 **Live site:** https://lizo-roadtown.github.io/proveskit-agent
 
 ## What is PROVES Kit Agent?
 
-An AI agent system that helps F'Prime developers:
+Two linked systems:
 
-- Generate F'Prime components from natural language requirements
-- Auto-draft interface control documents and command/telemetry tables
-- Review code for F'Prime pattern compliance
-- Capture design knowledge for team transitions
-- Provide a living documentation library and repo risk scans via MCP and VS Code
+- Living documentation library (MCP-backed, citations and excerpts only)
+- VS Code risk scan extension for mission-critical issues
+
+This repository is a public scrapbook for the concept and documentation. The working implementation will live in a separate repository.
 
 ## PROVES Kit Project
 
@@ -32,23 +31,22 @@ Cal Poly Pomona · Columbia University · Texas State University · Virginia Tec
 ```
 proveskit-agent/
 |-- index.md                    # Homepage
+|-- about.md                    # About the project
 |-- pages/
-|   |-- developers.md           # For F'Prime developers
-|   |-- researchers.md          # For AI/SE researchers
-|   |-- technical.md            # Agent architecture
-|   |-- component-generation.md # Component generation details
-|   |-- documentation.md        # Documentation capabilities
-|   |-- code-review.md          # Code review features
+|   |-- developers.md           # For developers
+|   |-- researchers.md          # For researchers
+|   |-- technical.md            # Architecture for MCP + risk scan
+|   |-- component-generation.md # Archive concept page
 |   `-- living-library.md       # Living documentation and risk scan
 |-- demos/                      # Example workflows (planned)
-`-- docs/                       # Technical documentation (planned)
+`-- docs/                       # Research notes
 ```
 
 ## Technology Stack
 
 **Site:** Jekyll with TeXt theme
-**Agent:** Claude 3.5 Sonnet (Anthropic)
-**Integration:** F'Prime autocoding toolchain
+**Library access:** MCP server + search index
+**Client:** VS Code extension
 
 ## Local Development
 
@@ -81,9 +79,9 @@ PROVES Kit Agent shares architectural patterns with **FRAMES** (Framework for Re
 
 | | FRAMES | PROVES Kit Agent |
 |---|--------|------------------|
-| **Domain** | Organizational analysis | Flight software development |
-| **Problem** | Predict mission risk | Accelerate F'Prime workflows |
-| **Agents** | Map vulnerabilities | Generate components, docs |
+| **Domain** | Organizational analysis | Knowledge transfer and risk sharing |
+| **Problem** | Predict mission risk | Reduce repeated failures across teams |
+| **Mechanism** | Structural diagnostics | MCP library + repo risk scan |
 
 **FRAMES Portfolio:** https://lizo-roadtown.github.io/Portfolio
 

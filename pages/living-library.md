@@ -26,6 +26,26 @@ The library is exposed through an MCP server so any AI system in VS Code can que
 
 ---
 
+## Where the Library Lives
+
+The canonical library is a public repository that stores reviewed entries in plain text (Markdown with small metadata blocks).
+
+The MCP server builds its search index from that repo.
+
+The implementation will live in its own repository (TBD), separate from this scrapbook site.
+
+---
+
+## Source Policy
+
+- Public sources only
+- Citations and excerpts only
+- Reviewed before publication
+
+This keeps the library open, verifiable, and safe to share across universities.
+
+---
+
 ## What Students Get
 
 - A stable first layer of docs for onboarding
