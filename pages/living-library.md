@@ -13,6 +13,19 @@ The core idea is simple: the structure owns outcomes, not individuals. We log wh
 
 ---
 
+## The Fragmentation Problem
+
+Knowledge is fragmented in predictable ways:
+
+- **Inside repos**: issues, commits, and tests each hold part of the story.
+- **Across teams**: the same failures repeat because fixes are not shared.
+- **Across sources**: PROVES hardware guidance, F Prime architecture, and ops fixes are separated.
+- **Across time**: context fades when teams rotate or projects pause.
+
+The library is built to make those fragments interrogatable as one system.
+
+---
+
 ## What It Is
 
 Think of it as three types of knowledge, unified:

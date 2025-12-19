@@ -53,6 +53,18 @@ graph TB
 
 ---
 
+## Fragmentation Map
+
+This is the gap the MCP library closes:
+
+- **Inside repos**: issues, commits, and tests are disconnected
+- **Across teams**: the same fixes are rediscovered
+- **Across sources**: PROVES build knowledge and F Prime architecture live apart
+
+The curation system ties these fragments to a single search and citation layer.
+
+---
+
 ## Storage Model
 
 ### Canonical Library (Open Source Repo)

@@ -18,6 +18,19 @@ article_header:
 1) A living documentation library for deep research through MCP
 2) A repo risk assessment extension that flags mission-critical issues in IDEs and links to fixes
 
+---
+
+## Why This Needs a Library You Can Interrogate
+
+Right now the knowledge needed to build and operate these systems is fragmented:
+
+- **Within a single repo**: design intent lives in issues, fixes live in commits, and tests live elsewhere.
+- **Across teams**: each group solves the same problems with no shared memory.
+- **Across sources**: PROVES hardware guidance, F Prime architecture, and operational fixes are in different places.
+- **Across time**: decisions fade when people rotate or projects pause.
+
+An interrogatable library is the only way to treat all of that as one system instead of disconnected fragments.
+
 ## What It Does
 
 | Capability | Description |
@@ -32,9 +45,9 @@ article_header:
 ```mermaid
 graph TB
   subgraph Sources
-    ProvesDocs[Build the system: assembly, hardware, flight software, testing]
-    FPrimeDocs[Build the software: architecture, ports, build, GDS]
-    OSSRepos[Operate and learn: configs, tests, ops notes, fixes]
+    ProvesDocs[PROVES: assembly, hardware, flight software, testing]
+    FPrimeDocs[F Prime: architecture, ports, build, GDS]
+    OSSRepos[Open source repos: configs, tests, ops notes, fixes]
   end
   ProvesDocs --> Curator[PROVES Agentic Curation System]
   FPrimeDocs --> Curator
@@ -58,12 +71,12 @@ graph TB
 Think of the library as three layers of practical knowledge:
 
 **1) Build the system**
-- Assembly and integration guides
+- PROVES assembly and integration guides
 - Hardware and subsystem references
 - Flight software and testing notes
 
 **2) Build the software**
-- Architecture and component model
+- F Prime architecture and component model
 - Ports, components, and topologies
 - Build system, tooling, and GDS usage
 

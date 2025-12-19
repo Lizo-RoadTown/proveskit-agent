@@ -40,6 +40,18 @@ The system owns outcomes. We log where the fix lives, not who caused the problem
 
 ---
 
+## Why an Interrogatable Library
+
+The problem is not a lack of documentation. It is fragmentation:
+
+- Inside repos, knowledge splits across issues, code, and tests
+- Across teams, fixes are not shared in a usable way
+- Across sources, build, software, and ops guidance are separated
+
+The library makes those fragments searchable as one system.
+
+---
+
 ## Status
 
 This site documents the concept and research direction. The working implementation will live in a separate repository.

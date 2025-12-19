@@ -9,6 +9,8 @@ key: page-researchers
 
 This project studies how an open source, MCP-backed library and a repo risk scan can improve knowledge transfer and mission safety.
 
+It centers on fragmentation as the core failure mode: disconnected issues, code, tests, and documentation across teams and sources.
+
 ---
 
 ## Research Questions

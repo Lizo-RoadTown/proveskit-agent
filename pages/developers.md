@@ -25,6 +25,9 @@ What you will find:
 - Software architecture knowledge (ports, components, build, GDS)
 - Operational knowledge (configs, checklists, fixes)
 
+Why it matters:
+- Your repo holds partial answers. The library connects the missing pieces.
+
 [Living Documentation Library](https://lizo-roadtown.github.io/proveskit-agent/living-library/)
 
 ### 2) Run the Risk Scan
