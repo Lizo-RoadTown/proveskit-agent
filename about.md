@@ -26,7 +26,14 @@ The system owns outcomes. We log where the fix lives, not who caused the problem
 
 ## How It Works
 
-- Sources: PROVES docs (assembly, hardware, flight software, testing), F Prime docs (architecture, build, GDS), and open source repos
+**The knowledge comes in three shapes:**
+
+- **Build knowledge**: assembly, hardware, flight software, testing
+- **Software architecture knowledge**: F Prime architecture, ports, build, GDS
+- **Operational knowledge**: configs, tests, issue reports, fixes
+
+**Then it is curated and delivered:**
+
 - Storage: citations and excerpts only, reviewed before inclusion
 - Access: MCP server for any AI tool
 - Action: IDE risk scan extension for daily checks

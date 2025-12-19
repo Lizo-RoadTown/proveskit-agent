@@ -15,14 +15,13 @@ The core idea is simple: the structure owns outcomes, not individuals. We log wh
 
 ## What It Is
 
-A shared, continuously updated library that combines:
+Think of it as three types of knowledge, unified:
 
-- PROVES Kit docs (assembly, hardware, software, test)
-- F Prime documentation (architecture, build, GDS)
-- Lessons learned with links to source artifacts
-- Risk patterns that can be checked against a repo
+- **Build knowledge**: assembly, hardware, flight software, and testing references
+- **Software architecture knowledge**: F Prime architecture, ports, build, and GDS
+- **Operational knowledge**: configs, test results, issue reports, and fixes
 
-The library is exposed through an MCP server so any AI system in IDEs can query it.
+The library is exposed through an MCP server so any AI system in IDEs can query it without needing to know where the information originally lived.
 
 ---
 

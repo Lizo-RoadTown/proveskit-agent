@@ -32,9 +32,9 @@ article_header:
 ```mermaid
 graph TB
   subgraph Sources
-    ProvesDocs[PROVES docs: assembly, hardware, flight software, testing]
-    FPrimeDocs[F Prime docs: architecture, ports, build, GDS]
-    OSSRepos[Open source repos: flight software, configs, tests, ops notes]
+    ProvesDocs[Build the system: assembly, hardware, flight software, testing]
+    FPrimeDocs[Build the software: architecture, ports, build, GDS]
+    OSSRepos[Operate and learn: configs, tests, ops notes, fixes]
   end
   ProvesDocs --> Curator[PROVES Agentic Curation System]
   FPrimeDocs --> Curator
@@ -55,22 +55,23 @@ graph TB
 
 ## Core Knowledge Sources
 
-**PROVES documentation:**
+Think of the library as three layers of practical knowledge:
+
+**1) Build the system**
 - Assembly and integration guides
 - Hardware and subsystem references
 - Flight software and testing notes
-- Mission history and quick start
 
-**F Prime documentation:**
+**2) Build the software**
 - Architecture and component model
 - Ports, components, and topologies
-- Build system and tooling
-- GDS usage and development process
+- Build system, tooling, and GDS usage
 
-**Open source repos:**
-- Flight software, configs, and tests
-- Operational checklists and procedures
+**3) Operate and learn**
+- Configs, tests, and operational checklists
 - Issue reports and fixes (as citations and excerpts)
+  
+These layers are curated into one searchable library so the answers feel connected instead of scattered.
 
 ---
 

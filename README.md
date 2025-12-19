@@ -19,8 +19,13 @@ This repository is an open source scrapbook for the concept and documentation. T
 
 ## Core Sources
 
+**Build knowledge**
 - PROVES Kit documentation: https://docs.proveskit.space/en/latest/
+
+**Software architecture knowledge**
 - F Prime documentation: https://fprime.jpl.nasa.gov/latest/docs/
+
+**Operational knowledge**
 - Open source repos (citations and excerpts only)
 
 ## Portfolio Structure

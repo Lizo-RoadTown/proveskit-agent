@@ -19,9 +19,9 @@ This system has two core products:
 ```mermaid
 graph TB
   subgraph Sources
-    ProvesDocs[PROVES docs: assembly, hardware, flight software, testing]
-    FPrimeDocs[F Prime docs: architecture, ports, build, GDS]
-    OSSRepos[Open source repos: flight software, configs, tests, ops notes]
+    ProvesDocs[Build knowledge: assembly, hardware, flight software, testing]
+    FPrimeDocs[Software architecture: ports, components, build, GDS]
+    OSSRepos[Operational knowledge: configs, tests, ops notes, fixes]
   end
   ProvesDocs --> Curator[PROVES Agentic Curation System]
   FPrimeDocs --> Curator
@@ -35,23 +35,20 @@ graph TB
 
 ---
 
-## Source Coverage
+## Source Coverage (What It Really Means)
 
-**PROVES documentation:**
+**Build knowledge (how to assemble and validate the system):**
 - Assembly and integration guides
 - Hardware and subsystem references
 - Flight software and testing notes
-- Mission history and quick start
 
-**F Prime documentation:**
+**Software architecture knowledge (how the system is structured):**
 - Architecture and component model
 - Ports, components, and topologies
-- Build system and tooling
-- GDS usage and development process
+- Build system, tooling, and GDS usage
 
-**Open source repos:**
-- Flight software, configs, and tests
-- Operational checklists and procedures
+**Operational knowledge (how it behaves in the real world):**
+- Configs, tests, and operational checklists
 - Issue reports and fixes (as citations and excerpts)
 
 ---

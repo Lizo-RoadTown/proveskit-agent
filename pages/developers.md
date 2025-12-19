@@ -20,6 +20,11 @@ Search the MCP-backed library for:
 - Risk patterns and how to verify
 - Links to source artifacts
 
+What you will find:
+- Build knowledge (assembly, hardware, testing)
+- Software architecture knowledge (ports, components, build, GDS)
+- Operational knowledge (configs, checklists, fixes)
+
 [Living Documentation Library](https://lizo-roadtown.github.io/proveskit-agent/living-library/)
 
 ### 2) Run the Risk Scan
