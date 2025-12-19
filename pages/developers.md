@@ -7,7 +7,7 @@ key: page-developers
 
 # PROVES Kit Agent for Developers
 
-This project is not a code generator. It is a living documentation system plus a repo risk scan.
+This project provides a living documentation system and a repo risk scan.
 
 ---
 
@@ -24,7 +24,7 @@ Search the MCP-backed library for:
 
 ### 2) Run the Risk Scan
 
-Use the VS Code extension to scan your repo:
+Use the IDE extension to scan your repo:
 
 - Pulls risk patterns from the MCP library
 - Flags likely mission-critical issues
@@ -51,19 +51,9 @@ Find issues before they become mission-critical by checking known risk patterns.
 
 Use the library to answer "what did past teams already learn?"
 
-### Share fixes across universities
+### Share fixes across teams
 
-Submit lessons with citations so other teams do not repeat the same errors.
-
----
-
-## What This Does Not Do
-
-- It does not generate flight software
-- It does not auto-fix code
-- It does not log blame or personal fault
-
-The system owns outcomes. The library stores where fixes live.
+Submit lessons with citations so others do not repeat the same errors.
 
 ---
 
@@ -74,4 +64,3 @@ The system owns outcomes. The library stores where fixes live.
 
 **F Prime:**
 - https://fprime.jpl.nasa.gov/
-

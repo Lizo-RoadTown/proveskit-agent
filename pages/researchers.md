@@ -7,7 +7,7 @@ key: page-researchers
 
 # PROVES Kit Agent for Researchers
 
-This project studies how a public, MCP-backed library and a repo risk scan can improve knowledge transfer and mission safety for university CubeSat teams.
+This project studies how an open source, MCP-backed library and a repo risk scan can improve knowledge transfer and mission safety.
 
 ---
 
@@ -16,7 +16,7 @@ This project studies how a public, MCP-backed library and a repo risk scan can i
 ### 1) Knowledge Transfer
 
 - Does a shared, searchable library reduce repeated failures?
-- What types of lessons get reused across universities?
+- What types of lessons get reused across teams and projects?
 - How does no-blame logging affect participation?
 
 ### 2) Risk Detection
@@ -27,9 +27,9 @@ This project studies how a public, MCP-backed library and a repo risk scan can i
 
 ### 3) Incentives and Adoption
 
-- Do students contribute more when the tool provides daily value?
+- Do contributors participate more when the tool provides daily value?
 - Which contribution models work best: opt-in, review-first, or automatic?
-- How do teams react to public, cross-university sharing?
+- How do teams react to open source sharing?
 
 ### 4) Retrieval Quality
 
@@ -42,7 +42,7 @@ This project studies how a public, MCP-backed library and a repo risk scan can i
 
 - PROVES documentation
 - F Prime documentation
-- Public university repos (citations and excerpts only)
+- Open source repos (citations and excerpts only)
 - Risk scan outputs (anonymized, no names)
 
 ---
@@ -60,7 +60,7 @@ This project studies how a public, MCP-backed library and a repo risk scan can i
 
 - No blame logging
 - No personal performance tracking
-- Public sources only
+- Open source materials only
 - Citations and excerpts only
 
 ---
@@ -69,4 +69,3 @@ This project studies how a public, MCP-backed library and a repo risk scan can i
 
 **Elizabeth Osborn** | Cal Poly Pomona  
 [eosborn@cpp.edu](mailto:eosborn@cpp.edu)
-

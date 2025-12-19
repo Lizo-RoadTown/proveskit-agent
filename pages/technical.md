@@ -10,9 +10,7 @@ key: page-technical
 This system has two core products:
 
 1) An MCP-backed living documentation library
-2) A VS Code risk scan extension
-
-It does not generate flight software.
+2) A repo risk assessment extension for IDEs
 
 ---
 
@@ -20,25 +18,53 @@ It does not generate flight software.
 
 ```mermaid
 graph TB
-  Sources[PROVES docs, F Prime docs, public repos] --> Curator[FRAMES curator]
-  Curator --> Library[Public library repo]
+  subgraph Sources
+    ProvesDocs[PROVES docs: assembly, hardware, flight software, testing]
+    FPrimeDocs[F Prime docs: architecture, ports, build, GDS]
+    OSSRepos[Open source repos: flight software, configs, tests, ops notes]
+  end
+  ProvesDocs --> Curator[PROVES Agentic Curation System]
+  FPrimeDocs --> Curator
+  OSSRepos --> Curator
+  Curator --> Library[Open source library repo]
   Library --> Index[Search + embeddings]
   Index --> MCP[MCP server]
-  MCP --> VSCode[VS Code extension]
-  MCP --> AI[AI copilots]
+  MCP --> IDE[IDE extensions]
+  MCP --> AI[AI tools]
 ```
+
+---
+
+## Source Coverage
+
+**PROVES documentation:**
+- Assembly and integration guides
+- Hardware and subsystem references
+- Flight software and testing notes
+- Mission history and quick start
+
+**F Prime documentation:**
+- Architecture and component model
+- Ports, components, and topologies
+- Build system and tooling
+- GDS usage and development process
+
+**Open source repos:**
+- Flight software, configs, and tests
+- Operational checklists and procedures
+- Issue reports and fixes (as citations and excerpts)
 
 ---
 
 ## Storage Model
 
-### Canonical Library (Public Repo)
+### Canonical Library (Open Source Repo)
 
 - Markdown entries with small metadata blocks
 - Review before merge
 - Citations and excerpts only
 
-This repo is the system of record and keeps the library transparent and open.
+This repo is the system of record and keeps the library transparent and open source.
 
 ### Search Index
 
@@ -56,13 +82,13 @@ The MCP server exposes:
 - Entry retrieval with citations
 - Source references to repos and docs
 
-This makes the library interrogatable by any AI tool in VS Code.
+This makes the library interrogatable by any AI tool in an IDE.
 
 ---
 
 ## Risk Scan Extension
 
-The VS Code extension:
+The IDE extension:
 
 1) Fetches risk patterns from MCP
 2) Scans the local repo for matches
@@ -93,7 +119,7 @@ The system owns outcomes. We log where the fix lives, not who caused the problem
 ```mermaid
 sequenceDiagram
   participant Dev as Developer
-  participant Ext as VS Code Extension
+  participant Ext as IDE Extension
   participant MCP as MCP Server
   participant Repo as Repo
 
@@ -103,4 +129,3 @@ sequenceDiagram
   Ext->>Dev: Report risks and fixes
   Ext->>MCP: Submit new pattern (optional)
 ```
-

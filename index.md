@@ -11,32 +11,19 @@ article_header:
     src: /assets/images/hero-banner.png
 ---
 
-# Living Documentation and Risk Scanning for CubeSat Teams
+# Living Documentation Library and Repo Risk Assessment
 
-**PROVES Kit Agent** is a public, MCP-backed knowledge system for university CubeSat teams. It focuses on two things:
+**PROVES Kit Agent** is an open source, MCP-backed knowledge system focused on two things:
 
-1) A living documentation library students can interrogate in VS Code
-2) A repo risk scan extension that flags mission-critical issues and links to fixes
-
----
-
-## The Challenge
-
-University CubeSat teams face repeatable problems:
-
-- Knowledge loss when students rotate out
-- No shared way to learn from failures across universities
-- Little or no pre-flight risk analysis
-- Mission-critical issues discovered too late
-
----
+1) A living documentation library for deep research through MCP
+2) A repo risk assessment extension that flags mission-critical issues in IDEs and links to fixes
 
 ## What It Does
 
 | Capability | Description |
 |------------|-------------|
 | **Living Documentation** | MCP library with lessons, docs, and risk patterns linked to artifacts |
-| **Risk Scan Extension** | VS Code scan that flags likely mission-critical issues with fixes |
+| **Risk Scan Extension** | IDE scan that flags likely mission-critical issues with fixes |
 
 ---
 
@@ -44,23 +31,52 @@ University CubeSat teams face repeatable problems:
 
 ```mermaid
 graph TB
-  Sources[PROVES docs, F Prime docs, public repos] --> Curator[FRAMES curator]
-  Curator --> Library[Public library repo]
+  subgraph Sources
+    ProvesDocs[PROVES docs: assembly, hardware, flight software, testing]
+    FPrimeDocs[F Prime docs: architecture, ports, build, GDS]
+    OSSRepos[Open source repos: flight software, configs, tests, ops notes]
+  end
+  ProvesDocs --> Curator[PROVES Agentic Curation System]
+  FPrimeDocs --> Curator
+  OSSRepos --> Curator
+  Curator --> Library[Open source library repo]
   Library --> MCP[MCP server]
-  MCP --> VSCode[VS Code extension]
-  MCP --> AI[AI copilots]
+  MCP --> IDE[IDE extensions]
+  MCP --> AI[AI tools]
 ```
 
 - Sources are indexed as citations and excerpts only
-- Entries are reviewed before being added to the public library
+- The PROVES Agentic Curation System normalizes entries and maintains citations
+- Entries are reviewed before inclusion in the open source library
 - The MCP server exposes the library for search and retrieval
-- The VS Code extension uses those patterns to scan a repo for risk
+- IDE extensions use risk patterns to scan repos
+
+---
+
+## Core Knowledge Sources
+
+**PROVES documentation:**
+- Assembly and integration guides
+- Hardware and subsystem references
+- Flight software and testing notes
+- Mission history and quick start
+
+**F Prime documentation:**
+- Architecture and component model
+- Ports, components, and topologies
+- Build system and tooling
+- GDS usage and development process
+
+**Open source repos:**
+- Flight software, configs, and tests
+- Operational checklists and procedures
+- Issue reports and fixes (as citations and excerpts)
 
 ---
 
 ## Living Documentation Library
 
-The library is the shared memory for every team. It stores:
+The library is the shared memory for users and projects. It is open source and stores:
 
 - Lessons learned with links to artifacts
 - Risk patterns and how to verify fixes
@@ -70,21 +86,9 @@ The library is the shared memory for every team. It stores:
 
 ---
 
-## Why PROVES and F Prime
-
-PROVES Kit and F Prime are the core sources for the library because they are the shared baseline for the teams we serve.
-
----
-
-## Relationship to FRAMES
-
-FRAMES provides the structural lens: the system owns outcomes, not individuals. The library logs where fixes live, not who caused problems.
-
----
-
 ## Status
 
-This repository is a public scrapbook for the concept and documentation. The working implementation will live in a separate repository.
+This repository is an open source scrapbook for the concept and documentation. The working implementation will live in a separate repository.
 
 ---
 
@@ -92,4 +96,3 @@ This repository is a public scrapbook for the concept and documentation. The wor
 
 **Elizabeth Osborn** | Cal Poly Pomona  
 [eosborn@cpp.edu](mailto:eosborn@cpp.edu)
-

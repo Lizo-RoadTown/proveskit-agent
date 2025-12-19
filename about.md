@@ -9,13 +9,7 @@ key: page-about
 
 ## The Vision
 
-Give university CubeSat teams a shared memory and a shared way to reduce mission risk.
-
----
-
-## The Problem
-
-Teams lose knowledge when students rotate, and failures are often repeated because lessons are not easy to find or share.
+Give technical teams a shared memory and a shared way to surface mission-critical risk.
 
 ---
 
@@ -23,8 +17,8 @@ Teams lose knowledge when students rotate, and failures are often repeated becau
 
 Two linked systems:
 
-1) A public, MCP-backed living documentation library
-2) A VS Code risk scan extension that checks repos and links to fixes
+1) An open source, MCP-backed living documentation library
+2) A repo risk assessment extension that checks repos and links to fixes
 
 The system owns outcomes. We log where the fix lives, not who caused the problem.
 
@@ -32,14 +26,13 @@ The system owns outcomes. We log where the fix lives, not who caused the problem
 
 ## How It Works
 
-- Sources: PROVES docs, F Prime docs, and public repos
-- Storage: citations and excerpts only, reviewed before publication
-- Access: MCP server for any AI in VS Code
-- Action: risk scan extension for daily checks
+- Sources: PROVES docs (assembly, hardware, flight software, testing), F Prime docs (architecture, build, GDS), and open source repos
+- Storage: citations and excerpts only, reviewed before inclusion
+- Access: MCP server for any AI tool
+- Action: IDE risk scan extension for daily checks
 
 ---
 
 ## Status
 
 This site documents the concept and research direction. The working implementation will live in a separate repository.
-

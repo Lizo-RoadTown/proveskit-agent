@@ -8,7 +8,7 @@ url     : https://lizo-roadtown.github.io
 baseurl : /proveskit-agent
 title   : PROVES Kit Agent
 description: >
-  Living documentation library and repo risk scanning for CubeSat teams.
+  Living documentation library and repo risk scanning.
   MCP-backed access to PROVES and F Prime knowledge.
 
 ## => Language and Timezone
@@ -22,7 +22,7 @@ author:
   type      : person
   name      : Elizabeth Osborn
   url       : https://lizo-roadtown.github.io/proveskit-agent
-  bio       : Researcher developing AI agents for flight software engineering
+  bio       : Researcher developing agentic curation systems for mission knowledge
   email     : eosborn@cpp.edu
   github    : Lizo-RoadTown
   linkedin  : # add if you have one
