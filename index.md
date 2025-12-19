@@ -52,7 +52,7 @@ graph LR
 | **Component Generation** | Draft F'Prime components from specifications with proper port definitions |
 | **Documentation Support** | Auto-generate interface definitions, command dictionaries, telemetry tables |
 | **Code Review** | Check F'Prime patterns, detect common errors, suggest improvements |
-| **Knowledge Capture** | Extract design decisions and rationale from code and commit history |
+| **Living Documentation** | Interrogatable library of lessons, docs, and risk patterns with MCP access |
 
 ---
 
@@ -75,6 +75,19 @@ Works directly with F'Prime tooling:
 - Generates compliant C++ code following F'Prime patterns
 - Integrates with `fprime-util` build and test workflows
 - Supports F'Prime autocoding and component templates
+
+---
+
+## Living Documentation and Risk Scan
+
+The agent now supports a deeper layer of documentation that students can interrogate through an MCP server and a VS Code extension.
+
+- MCP library holds docs, lessons, and risk patterns
+- VS Code extension scans repos for mission-critical risks
+- Results link to real fixes and source artifacts
+- No names or blame. The structure owns outcomes
+
+[Living Documentation Library](https://lizo-roadtown.github.io/proveskit-agent/living-library/)
 
 ---
 
@@ -113,9 +126,9 @@ Cal Poly Pomona · Columbia University · Texas State University · Virginia Tec
 </div>
 
 <div class="card">
-<h3>Knowledge Capture</h3>
-<p>Extract design rationale from commit history and conversations to support team transitions.</p>
-<p><a href="/proveskit-agent/knowledge-capture/">Learn more →</a></p>
+<h3>Living Documentation Library</h3>
+<p>A shared library of lessons, docs, and risk patterns accessible through MCP and VS Code.</p>
+<p><a href="/proveskit-agent/living-library/">Learn more</a></p>
 </div>
 
 </div>

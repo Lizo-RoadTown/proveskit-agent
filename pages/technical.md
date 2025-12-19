@@ -17,6 +17,7 @@ The PROVES Kit Agent system architecture, implementation details, and F'Prime in
 graph TB
     subgraph User["User Interface"]
         CLI["CLI / IDE Plugin"]
+        VSCode["VS Code Extension"]
         Web["Web Interface"]
     end
 
@@ -42,12 +43,46 @@ graph TB
         Patterns["F'Prime Patterns"]
         Examples["Component Examples"]
         Docs["F'Prime Docs"]
+        Library["Living Documentation Library"]
     end
 
     User --> Orchestrator
     Orchestrator --> Agents
     Agents --> FPrime
     Agents --> Knowledge
+```
+
+---
+
+## Living Documentation Layer
+
+This layer makes the knowledge base interrogatable by any AI system in VS Code through an MCP server.
+
+```mermaid
+graph TB
+    subgraph Sources["Sources"]
+        ProvesDocs["PROVES Docs"]
+        FPrimeDocs["F'Prime Docs"]
+        Repos["Team Repos"]
+        Lessons["Lessons and Risk Reports"]
+    end
+
+    subgraph Curator["FRAMES Curator"]
+        Normalize["Normalize and tag"]
+    end
+
+    subgraph MCP["MCP Knowledge Library"]
+        Index["Search index"]
+        Risk["Risk patterns"]
+        Entries["Lesson entries"]
+    end
+
+    subgraph Clients["Clients"]
+        VSCode["VS Code extension"]
+        Agents["AI copilots"]
+    end
+
+    Sources --> Curator --> MCP --> Clients
 ```
 
 ---
@@ -185,6 +220,16 @@ Integrated access to:
 - Best practices guides
 - Common pitfalls
 
+### Living Documentation Library
+
+The MCP library contains:
+- Lessons learned with links to artifacts
+- Risk patterns for automated scanning
+- Verified fixes and how to test them
+- Proven configuration guidance
+
+The library is curated by the FRAMES agent to keep entries consistent and easy to interrogate.
+
 ---
 
 ## Implementation Stack
@@ -260,6 +305,24 @@ sequenceDiagram
     DocAgent->>DocAgent: Extract interfaces
     DocAgent->>Orchestrator: Generated docs
     Orchestrator->>User: ICD.md, tables
+```
+
+---
+
+### Risk Scan Flow
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant Ext as VS Code Extension
+    participant MCP as MCP Library
+    participant Repo as Repo
+
+    Dev->>Ext: Run daily scan
+    Ext->>MCP: Fetch risk patterns
+    Ext->>Repo: Scan for matches
+    Ext->>Dev: Report risks and fixes
+    Ext->>MCP: Publish new pattern (optional)
 ```
 
 ---

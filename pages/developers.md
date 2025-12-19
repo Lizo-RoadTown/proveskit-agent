@@ -81,6 +81,24 @@ agent review TempSensorComponent.cpp
 # Re-run review
 ```
 
+### 4. Daily Risk Scan (VS Code Extension)
+
+```bash
+# Run daily scan from VS Code
+# Extension queries MCP library for risk patterns
+# Reports likely mission-critical issues with fixes
+```
+
+### 5. Living Documentation Library
+
+Use the MCP-backed library to search past lessons and fixes:
+
+- Query by component name or subsystem
+- Follow links to code, docs, and tests
+- Reuse verified fixes and validation steps
+
+[Living Documentation Library](https://lizo-roadtown.github.io/proveskit-agent/living-library/)
+
 ---
 
 ## Common Use Cases
@@ -125,6 +143,16 @@ agent review TempSensorComponent.cpp
 2. Update command/telemetry tables
 3. Regenerate interface documentation
 4. Flag breaking changes
+
+### Risk Scan and Lessons
+
+**Scenario:** You want to avoid mission-critical regressions.
+
+**Agent assists:**
+1. Pull risk patterns from the MCP library
+2. Scan the repo for matches
+3. Link to verified fixes and tests
+4. Publish new patterns when a fix is confirmed
 
 ---
 

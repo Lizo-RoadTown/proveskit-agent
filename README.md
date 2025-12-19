@@ -16,6 +16,7 @@ An AI agent system that helps F'Prime developers:
 - Auto-draft interface control documents and command/telemetry tables
 - Review code for F'Prime pattern compliance
 - Capture design knowledge for team transitions
+- Provide a living documentation library and repo risk scans via MCP and VS Code
 
 ## PROVES Kit Project
 
@@ -30,16 +31,17 @@ Cal Poly Pomona · Columbia University · Texas State University · Virginia Tec
 
 ```
 proveskit-agent/
-├── index.md                    # Homepage
-├── pages/
-│   ├── developers.md          # For F'Prime developers
-│   ├── researchers.md         # For AI/SE researchers
-│   ├── technical.md           # Agent architecture
-│   ├── component-generation.md # Component generation details
-│   ├── documentation.md       # Documentation capabilities
-│   └── code-review.md         # Code review features
-├── demos/                     # Example workflows (planned)
-└── docs/                      # Technical documentation (planned)
+|-- index.md                    # Homepage
+|-- pages/
+|   |-- developers.md           # For F'Prime developers
+|   |-- researchers.md          # For AI/SE researchers
+|   |-- technical.md            # Agent architecture
+|   |-- component-generation.md # Component generation details
+|   |-- documentation.md        # Documentation capabilities
+|   |-- code-review.md          # Code review features
+|   `-- living-library.md       # Living documentation and risk scan
+|-- demos/                      # Example workflows (planned)
+`-- docs/                       # Technical documentation (planned)
 ```
 
 ## Technology Stack
