@@ -77,9 +77,9 @@ graph TB
 
 ## The Solution: Automated Knowledge Capture + Interrogatable Library
 
-**PROVES Kit Agent** solves this through a two-part system:
+**PROVES Library** (formerly PROVES Kit Agent) solves this through an integrated three-component system:
 
-### 1. Risk Scanning = Automated Knowledge Capture
+###1. Risk Scanner = Automated Knowledge Capture
 
 **The breakthrough:** Risk scanning is the capture point. We create a reciprocal exchange:
 
@@ -105,7 +105,38 @@ graph LR
     style Team fill:#073b4c
 ```
 
-### 2. MCP Server = Interrogatable Memory for AI
+### 2. Knowledge Graph = Structural Understanding
+
+**The foundation:** A Neo4j/PostgreSQL knowledge graph using ERV (Engineering Relationship Vocabulary) to model:
+
+- Component dependencies and conflicts
+- Cascade risks (power, data, thermal, timing)
+- Pattern relationships and mitigations
+- F´ architecture and PROVES hardware connections
+
+```mermaid
+graph TB
+    subgraph Knowledge Graph
+        N1[MPU-6050 IMU]
+        N2[BNO055 IMU]
+        N3[I2C Bus Driver]
+        N4[TCA9548A Multiplexer]
+        N5[I2C Conflict Pattern]
+    end
+
+    N1 -->|conflicts_with| N2
+    N3 -->|depends_on| N1
+    N4 -->|enables| N5
+    N5 -->|mitigates| N1
+
+    style N1 fill:#e63946
+    style N2 fill:#e63946
+    style N3 fill:#118ab2
+    style N4 fill:#06d6a0
+    style N5 fill:#073b4c
+```
+
+### 3. MCP Server = Interrogatable Memory for AI
 
 **The game-changer:** An MCP (Model Context Protocol) server makes the library **interrogatable, not just searchable**.
 
@@ -121,7 +152,7 @@ graph TB
         T1 --> T2 --> T3
     end
 
-    subgraph PROVES Kit Agent
+    subgraph PROVES Library
         P1[Captured Knowledge]
         P2[MCP Server]
         P3[AI Interrogation]
@@ -145,62 +176,305 @@ This creates **MEMORY** - a smart library that grows smarter with every team tha
 
 ---
 
-## How It Works: The Complete System
+## Implemented Architecture: The Complete System
 
 ```mermaid
 graph TB
-    subgraph Capture
-        Team1[University Team A]
-        Team2[University Team B]
-        Team3[University Team C]
-        Scanner[Risk Scanner]
+    subgraph External Sources
+        FPrime[F´ GitHub<br/>nasa/fprime]
+        PROVES[PROVES Kit GitHub]
+        TeamRepos[University Repos]
     end
 
-    subgraph Process
-        Curator[Agentic Curator]
-        Review[Human Review]
+    subgraph Documentation Sync
+        GitHubMCP[GitHub MCP<br/>40 tools]
+        DocSync[Doc Sync Manager<br/>Daily incremental]
     end
 
-    subgraph Library
-        Repo[Open Source Repo]
-        MCP[MCP Server]
+    subgraph Knowledge Base
+        NeonDB[(Neon PostgreSQL<br/>Knowledge Graph)]
+        LibEntries[Library Entries<br/>Markdown indexed]
+        KGNodes[KG Nodes<br/>Components, Hardware]
+        KGRels[KG Relationships<br/>ERV types]
     end
 
-    subgraph Access
-        IDE[IDE Extensions]
-        AI[AI Tools]
-        Search[Search Interface]
+    subgraph Agentic Layer
+        LangGraph[LangGraph<br/>Agent Orchestration]
+        Curator[Curator Agent<br/>Normalize captures]
+        Builder[Builder Agent<br/>Generate code]
+        Claude[Claude Sonnet 4.5<br/>via Anthropic API]
     end
 
-    Team1 <-->|Push/Pull| Scanner
-    Team2 <-->|Push/Pull| Scanner
-    Team3 <-->|Push/Pull| Scanner
+    subgraph Risk Detection
+        Scanner[Risk Scanner<br/>AST + Graph]
+        Patterns[Risk Patterns<br/>5 initial]
+    end
 
-    Scanner -->|Raw captures| Curator
-    Curator -->|Normalized lessons| Review
-    Review -->|Approved entries| Repo
+    subgraph Access Layer
+        MCPAPI[MCP Server<br/>FastAPI]
+        VSCode[VS Code Extension]
+        NeonMCP[Neon MCP<br/>23 tools]
+        LangChainMCP[LangChain MCP]
+    end
 
-    Repo -->|Indexes| MCP
+    FPrime -->|API fetch| GitHubMCP
+    PROVES -->|API fetch| GitHubMCP
+    GitHubMCP -->|Process docs| DocSync
+    DocSync -->|Insert| NeonDB
 
-    MCP --> IDE
-    MCP --> AI
-    MCP --> Search
+    TeamRepos -->|Scan| Scanner
+    Scanner -->|Detect risks| Patterns
+    Scanner -->|Capture context| Curator
 
-    IDE -->|New risks found| Scanner
+    NeonDB --> LibEntries
+    NeonDB --> KGNodes
+    NeonDB --> KGRels
 
-    style Scanner fill:#06d6a0
-    style MCP fill:#118ab2
-    style Repo fill:#073b4c
+    LibEntries -->|Query| Curator
+    KGNodes -->|Analyze| Scanner
+    KGRels -->|Cascade paths| Scanner
+
+    Curator -->|Orchestrate| LangGraph
+    Builder -->|Orchestrate| LangGraph
+    LangGraph -->|Call| Claude
+
+    Curator -->|Write| NeonDB
+    Builder -->|Generate| NeonDB
+
+    NeonDB -->|Expose| MCPAPI
+    NeonDB -->|Query| NeonMCP
+    MCPAPI --> VSCode
+    NeonMCP --> Claude
+    LangChainMCP --> LangGraph
+
+    style NeonDB fill:#06d6a0
+    style GitHubMCP fill:#118ab2
+    style LangGraph fill:#073b4c
+    style Claude fill:#e63946
 ```
 
 **The virtuous cycle:**
 
-1. Teams scan repos for mission-critical risks
-2. Scanner detects risks AND captures context/fixes
-3. Curator normalizes lessons with citations
-4. Human review approves entries
-5. Library grows, making scanner smarter
-6. All teams benefit from collective knowledge
+1. **Documentation sync:** F´ and PROVES Kit docs fetched via GitHub API daily
+2. **Knowledge graph:** Docs processed into structured nodes and relationships
+3. **Risk scanning:** Teams scan repos for mission-critical risks
+4. **Context capture:** Scanner detects risks AND captures context/fixes
+5. **Agent curation:** Curator normalizes lessons with citations (human-in-loop)
+6. **Library growth:** Approved entries enrich the knowledge graph
+7. **AI interrogation:** MCP server enables intelligent queries
+8. **All teams benefit:** Collective knowledge accessible through multiple interfaces
+
+---
+
+## Implemented Components (December 2025)
+
+### ✅ Database Layer (Neon PostgreSQL)
+- **9 tables** for knowledge graph, library, risks, and agent workflows
+- **ERV schema** with 6 relationship types (depends_on, conflicts_with, enables, requires, mitigates, causes)
+- **pgvector** extension for semantic search
+- **6 initial nodes**: Hardware (MPU-6050, BNO055, TCA9548A), Components (IMU Driver, I2C Bus), Patterns (I2C Conflict)
+- **3 relationships** demonstrating conflicts, dependencies, and mitigations
+- **5 risk patterns**: I2C conflict, memory leak, power budget, missing dependencies, buffer overflow
+
+### ✅ Python Infrastructure
+- **db_connector.py**: Connection pooling and query utilities
+- **graph_manager.py**: CRUD for nodes and ERV relationships
+- **library_indexer.py**: Markdown parser with YAML frontmatter
+- **github_doc_sync.py**: GitHub API-based documentation sync (no local storage)
+- **apply_schema.py**: Database initialization and migration
+
+### ✅ Agentic Framework (LangGraph)
+- **agentic_claude.py**: Autonomous agent framework
+- **Curator agent**: Citation extraction, quality scoring, duplicate detection
+- **Builder agent**: F´ code generation from patterns
+- **Human-in-loop**: Safety-first approval workflow
+
+### ✅ Documentation Sync
+- **Daily incremental sync** via Git diff detection
+- **GitHub API integration** (no local clones needed)
+- **Commit SHA tracking** for change detection
+- **Multi-repo support**: F´, PROVES Kit, community entries
+
+### ✅ MCP Integration
+- **Neon MCP**: 23 database tools for direct PostgreSQL access
+- **GitHub MCP**: 40 tools for repo operations
+- **LangChain MCP**: Agent orchestration and RAG tools
+
+### ⏸️ In Progress
+- **Risk Scanner**: AST parsing for Python/C++ (structure in place)
+- **Vector embeddings**: Semantic search implementation
+- **FastAPI MCP Server**: REST endpoints for library queries
+- **VS Code Extension**: IDE integration
+
+---
+
+## Database Schema: ERV Knowledge Graph
+
+```mermaid
+erDiagram
+    LIBRARY_ENTRIES ||--o{ KG_NODES : "documents"
+    KG_NODES ||--o{ KG_RELATIONSHIPS : "source"
+    KG_NODES ||--o{ KG_RELATIONSHIPS : "target"
+    RISK_PATTERNS ||--o{ DETECTED_RISKS : "defines"
+    LIBRARY_ENTRIES ||--o{ CURATOR_JOBS : "generates"
+    LIBRARY_ENTRIES ||--o{ BUILDER_JOBS : "uses"
+
+    LIBRARY_ENTRIES {
+        uuid id PK
+        text title
+        text slug UK
+        text file_path
+        enum entry_type
+        enum domain
+        text content
+        text summary
+        text[] tags
+        text[] sources
+        decimal quality_score
+        enum quality_tier
+        vector embedding
+    }
+
+    KG_NODES {
+        uuid id PK
+        text name
+        text node_type
+        text description
+        jsonb properties
+        vector embedding
+    }
+
+    KG_RELATIONSHIPS {
+        uuid id PK
+        uuid source_node_id FK
+        uuid target_node_id FK
+        enum relationship_type
+        decimal strength
+        text cascade_domain
+        boolean is_critical
+    }
+
+    RISK_PATTERNS {
+        uuid id PK
+        text name UK
+        text pattern_type
+        text severity
+        jsonb pattern_definition
+    }
+
+    CURATOR_JOBS {
+        uuid id PK
+        text raw_capture_text
+        text status
+        decimal quality_score
+        boolean needs_review
+    }
+```
+
+**Relationship Types (ERV):**
+- `depends_on`: Component A requires Component B to function
+- `conflicts_with`: Components cannot coexist (e.g., I2C address collision)
+- `enables`: Component A enables capability/pattern B
+- `requires`: Component A needs condition/configuration B
+- `mitigates`: Solution A reduces risk B
+- `causes`: Action A produces consequence B
+
+---
+
+## Documentation Sync Flow
+
+```mermaid
+sequenceDiagram
+    participant GH as GitHub API
+    participant Sync as Doc Sync Manager
+    participant DB as Neon Database
+    participant Graph as Knowledge Graph
+
+    Note over Sync: Daily at 6:00 AM
+
+    Sync->>DB: Get last_commit_sha
+    DB-->>Sync: "abc123"
+
+    Sync->>GH: GET /repos/nasa/fprime/commits/main
+    GH-->>Sync: { "sha": "def456" }
+
+    alt Changes detected
+        Sync->>GH: GET /compare/abc123...def456
+        GH-->>Sync: [changed_files]
+
+        loop For each changed file
+            Sync->>GH: GET /contents/docs/Architecture.md
+            GH-->>Sync: { "content": "base64..." }
+
+            Sync->>Sync: Decode and parse markdown
+            Sync->>Sync: Extract metadata and entities
+
+            Sync->>DB: UPDATE library_entries
+            Sync->>Graph: Update nodes and relationships
+        end
+
+        Sync->>DB: UPDATE last_commit_sha = "def456"
+    else No changes
+        Sync->>Sync: Skip processing
+    end
+
+    Note over Sync: ~50-100 API calls<br/>~2-5 minutes
+```
+
+**Benefits:**
+- No local disk space needed (GitHub API approach)
+- Within rate limits (5000/hour with token)
+- Incremental updates (only changed files)
+- Automatic daily refresh
+
+---
+
+## Agentic Workflow: Curator Agent
+
+```mermaid
+stateDiagram-v2
+    [*] --> RawCapture: GitHub issue/PR/commit
+
+    RawCapture --> CitationExtraction: Start curation
+    CitationExtraction --> MetadataAnalysis: Extract sources
+
+    MetadataAnalysis --> DuplicateCheck: Classify type/domain
+    DuplicateCheck --> QualityScoring: No duplicates
+
+    DuplicateCheck --> HumanReview: Duplicate found
+    QualityScoring --> HumanReview: Score < 0.5
+    QualityScoring --> LibraryEntry: Score >= 0.5
+
+    HumanReview --> LibraryEntry: Approved
+    HumanReview --> [*]: Rejected
+
+    LibraryEntry --> KnowledgeGraph: Create nodes
+    KnowledgeGraph --> [*]: Complete
+
+    note right of QualityScoring
+        Scoring criteria:
+        - Citation count
+        - Verification present
+        - Completeness
+        - Hardware specificity
+    end note
+
+    note right of HumanReview
+        Safety-first philosophy:
+        Agents propose,
+        humans approve
+    end note
+```
+
+**Curator Agent Workflow:**
+1. **Raw capture** from GitHub issue, PR, or commit
+2. **Citation extraction** using Claude API (structured output)
+3. **Metadata analysis** (type, domain, tags)
+4. **Duplicate check** via graph similarity queries
+5. **Quality scoring** (0.0-1.0 scale based on completeness, citations, verification)
+6. **Human review** if score < 0.5 or duplicate detected
+7. **Library entry creation** with proper metadata
+8. **Knowledge graph update** with extracted nodes and relationships
 
 ---
 
@@ -214,17 +488,19 @@ Access the collective knowledge of all PROVES Kit and F Prime missions. Interrog
 - "How did other teams solve radio communication timing issues?"
 - "What testing patterns prevent mission-critical failures?"
 
+**Now powered by actual knowledge graph queries across 6 nodes and 3 relationships, growing daily**
+
 ### For Active Programs
 
-- **Daily risk scanning** catches issues before they become critical
-- **Automated capture** means no manual documentation burden
-- **Shared learning** accelerates technology development across all programs
+- **Daily risk scanning** catches issues before they become critical (5 initial patterns, expanding)
+- **Automated capture** means no manual documentation burden (curator agent handles normalization)
+- **Shared learning** accelerates technology development across all programs (Neon database with MCP access)
 
 ### For the Ecosystem
 
-- Knowledge accumulates automatically through the push/pull loop
-- Technology grows faster when failures and wins are captured and queryable
-- New programs don't start from zero - they start from collective experience
+- Knowledge accumulates automatically through the push/pull loop (GitHub API sync)
+- Technology grows faster when failures and wins are captured and queryable (ERV relationships)
+- New programs don't start from zero - they start from collective experience (interrogatable via MCP)
 
 ---
 
@@ -250,7 +526,7 @@ The library captures practical knowledge across three domains:
 - Issue reports and verified fixes
 - Test results and validation procedures
 
-All curated with citations and artifact links. All interrogatable through MCP.
+All curated with citations and artifact links. All interrogatable through MCP. **All stored in operational Neon PostgreSQL database.**
 
 ---
 
@@ -266,22 +542,59 @@ All curated with citations and artifact links. All interrogatable through MCP.
 ### No manual work required
 
 - Risk scanning happens as part of daily workflow
-- Knowledge capture is automatic
-- Curation is agent-assisted with human review
+- Knowledge capture is automatic (GitHub API sync)
+- Curation is agent-assisted with human review (LangGraph orchestration)
 
 ### Open source and transparent
 
-- Library stored in open source repo
+- Library stored in open source repo (github.com/Lizo-RoadTown/PROVES_LIBRARY)
 - Citations and excerpts (no proprietary data)
-- Community-reviewed before inclusion
+- Community-reviewed before inclusion (human-in-loop)
 
 ---
 
-## Status
+## Current Status (December 2025)
 
-This repository is the concept documentation and research scrapbook. The working implementation (MCP server, risk scanner, curation agent) will live in a separate repository.
+**Phase:** Active development with working implementation
 
-**Current phase:** Defining the architecture and knowledge capture mechanisms
+### Completed ✅
+- Neon PostgreSQL knowledge graph (9 tables, 6 nodes, 3 relationships)
+- Python utilities for database and graph management
+- GitHub API documentation sync system
+- LangGraph agentic framework
+- MCP server integrations (Neon, GitHub, LangChain)
+- Curator and Builder agent specifications
+- Initial risk patterns (5 defined)
+- Example library entry (I2C conflict resolution)
+
+### In Progress ⏸️
+- Risk scanner AST parser implementation
+- Vector embeddings for semantic search
+- FastAPI MCP server endpoints
+- VS Code extension
+- F´ documentation sync (ready to execute)
+- PROVES Kit documentation sync (pending repo URL)
+
+### Next Milestones 🎯
+- Complete risk scanner with 5 initial patterns
+- Sync 50-100 F´ documentation entries
+- Test curator agent with real GitHub captures
+- Deploy MCP server for team access
+- Onboard first university partner for pilot
+
+**Implementation repository:** [github.com/Lizo-RoadTown/PROVES_LIBRARY](https://github.com/Lizo-RoadTown/PROVES_LIBRARY)
+
+---
+
+## Technical Stack
+
+- **Database:** Neon PostgreSQL with pgvector and pg_trgm
+- **Knowledge Graph:** ERV (Engineering Relationship Vocabulary) schema
+- **Language:** Python 3.14
+- **AI Framework:** LangGraph with Claude Sonnet 4.5
+- **MCP Integrations:** Neon (23 tools), GitHub (40 tools), LangChain
+- **Documentation Sync:** GitHub REST API (no local storage)
+- **Frontend:** VS Code extension (planned), Jupyter notebooks (exploration)
 
 ---
 
@@ -293,9 +606,17 @@ This repository is the concept documentation and research scrapbook. The working
 - [For Developers](/proveskit-agent/developers/) - How to use the tools
 - [For Researchers](/proveskit-agent/researchers/) - Research questions and evaluation
 
+**Implementation Details:**
+- [PROVES_LIBRARY Repository](https://github.com/Lizo-RoadTown/PROVES_LIBRARY) - Working code and documentation
+- [Setup Log](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/SETUP_LOG.md) - Complete execution history
+- [Documentation Sync Strategy](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/docs/DOCUMENTATION_SYNC_STRATEGY.md) - Architecture and best practices
+
 ---
 
 ## Contact
 
 **Elizabeth Osborn** | Cal Poly Pomona
 [eosborn@cpp.edu](mailto:eosborn@cpp.edu)
+
+**Project Status:** Active development | December 2025
+**Last Updated:** December 20, 2025
