@@ -1,0 +1,19 @@
+header:
+  - titles:
+      en: Home
+    url: /proveskit-agent/
+  - titles:
+      en: About
+    url: /proveskit-agent/about/
+  - titles:
+      en: Living Library
+    url: /proveskit-agent/living-library/
+  - titles:
+      en: Technical
+    url: /proveskit-agent/technical/
+  - titles:
+      en: Developers
+    url: /proveskit-agent/developers/
+  - titles:
+      en: Researchers
+    url: /proveskit-agent/researchers/

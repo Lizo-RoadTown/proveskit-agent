@@ -40,6 +40,24 @@ paths:
   archive : /archive.html
   rss     : /feed.xml
 
+## => Navigation
+##############################
+header:
+  theme: dark
+navigation:
+  - url: /proveskit-agent/
+    title: Home
+  - url: /proveskit-agent/about/
+    title: About
+  - url: /proveskit-agent/living-library/
+    title: Living Library
+  - url: /proveskit-agent/technical/
+    title: Technical
+  - url: /proveskit-agent/developers/
+    title: Developers
+  - url: /proveskit-agent/researchers/
+    title: Researchers
+
 ## => Post
 ##############################
 excerpt_separator: <!--more-->
