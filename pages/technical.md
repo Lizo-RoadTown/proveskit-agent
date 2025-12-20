@@ -5,6 +5,8 @@ permalink: /technical/
 key: page-technical
 ---
 
+[← Back to Home](/proveskit-agent/)
+
 # Technical Architecture
 
 This system has two core products:

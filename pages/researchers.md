@@ -5,6 +5,8 @@ permalink: /researchers/
 key: page-researchers
 ---
 
+[← Back to Home](/proveskit-agent/)
+
 # PROVES Kit Agent for Researchers
 
 This project studies how an open source, MCP-backed library and a repo risk scan can improve knowledge transfer and mission safety.

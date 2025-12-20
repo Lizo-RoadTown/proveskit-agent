@@ -5,6 +5,8 @@ permalink: /living-library/
 key: page-living-library
 ---
 
+[← Back to Home](/proveskit-agent/)
+
 # Living Documentation Library
 
 The PROVES Kit Agent now includes a deeper layer of "living" documentation that users can interrogate beyond the first-layer docs.

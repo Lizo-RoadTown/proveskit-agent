@@ -5,6 +5,8 @@ permalink: /about/
 key: page-about
 ---
 
+[← Back to Home](/proveskit-agent/)
+
 # About PROVES Kit Agent
 
 ## The Vision
