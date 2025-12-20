@@ -51,6 +51,8 @@ navigation:
     title: About
   - url: /proveskit-agent/living-library/
     title: Living Library
+  - url: /proveskit-agent/architecture/
+    title: Architecture
   - url: /proveskit-agent/technical/
     title: Technical
   - url: /proveskit-agent/developers/
