@@ -288,6 +288,7 @@ This repository is the concept documentation and research scrapbook. The working
 ## Learn More
 
 - [Living Documentation Library](/proveskit-agent/living-library/) - How the library works
+- [System Architecture](/proveskit-agent/architecture/) - Complete technical architecture with knowledge graphs, agents, and RAG
 - [Technical Architecture](/proveskit-agent/technical/) - System design details
 - [For Developers](/proveskit-agent/developers/) - How to use the tools
 - [For Researchers](/proveskit-agent/researchers/) - Research questions and evaluation
