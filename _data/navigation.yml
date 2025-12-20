@@ -1,22 +1,22 @@
 header:
   - titles:
       en: Home
-    url: /proveskit-agent/
+    url: /
   - titles:
       en: About
-    url: /proveskit-agent/about/
+    url: /about/
   - titles:
       en: Living Library
-    url: /proveskit-agent/living-library/
+    url: /living-library/
   - titles:
       en: Architecture
-    url: /proveskit-agent/architecture/
+    url: /architecture/
   - titles:
       en: Technical
-    url: /proveskit-agent/technical/
+    url: /technical/
   - titles:
       en: Developers
-    url: /proveskit-agent/developers/
+    url: /developers/
   - titles:
       en: Researchers
-    url: /proveskit-agent/researchers/
+    url: /researchers/
