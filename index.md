@@ -2,13 +2,6 @@
 layout: article
 title: PROVES Kit Agent
 key: page-home
-article_header:
-  type: overlay
-  theme: dark
-  background_color: '#1e1e2e'
-  background_image:
-    gradient: 'linear-gradient(135deg, rgba(30, 30, 46, 1.0), rgba(255, 100, 35, 0.3))'
-  height: 300px
 ---
 
 ## The Problem: Knowledge is Fragmented, Even in Open Source
