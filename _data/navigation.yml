@@ -9,6 +9,9 @@ header:
       en: Living Library
     url: /proveskit-agent/living-library/
   - titles:
+      en: Architecture
+    url: /proveskit-agent/architecture/
+  - titles:
       en: Technical
     url: /proveskit-agent/technical/
   - titles:

@@ -2,6 +2,7 @@
 layout: article
 title: System Architecture
 key: page-architecture
+permalink: /architecture/
 ---
 
 [← Back to Home](/proveskit-agent/)
