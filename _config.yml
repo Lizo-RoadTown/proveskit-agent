@@ -1,4 +1,4 @@
-# PROVES Kit Agent Portfolio - TeXt Theme Configuration
+﻿# PROVES Kit Agent Portfolio - TeXt Theme Configuration
 
 ## => Site Settings
 ##############################
@@ -7,7 +7,9 @@ highlight_theme: tomorrow-night # "default", "tomorrow", "tomorrow-night", "tomo
 url     : https://lizo-roadtown.github.io
 baseurl : /proveskit-agent
 title   : PROVES Library
-description: >\r\n  AI-powered knowledge capture for CubeSat missions.\r\n  LangGraph agents extract dependencies and build a queryable knowledge graph.
+description: >-
+  AI-powered knowledge capture for CubeSat missions.
+  LangGraph agents extract dependencies and build a queryable knowledge graph.
 
 ## => Language and Timezone
 ##############################
@@ -71,7 +73,7 @@ toc:
 ##############################
 mathjax: true
 mathjax_autoNumber: false
-mermaid: false  # Disabled - using custom Mermaid v10 in head/custom.html instead
+mermaid: false
 chart: false
 
 ## => Paginate
@@ -147,4 +149,3 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-seo-tag
-
