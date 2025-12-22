@@ -3,589 +3,365 @@ layout: article
 title: System Architecture
 key: page-architecture
 permalink: /architecture/
+aside:
+  toc: true
 ---
 
 [← Back to Home](/proveskit-agent/)
 
-# PROVES Kit Agent: Complete System Architecture
+# System Architecture: How PROVES Library Works
 
-This page provides a comprehensive technical overview of the PROVES Kit Agent system, showing how knowledge graph technology, autonomous agents, and hybrid RAG systems work together to create an interrogatable memory for CubeSat missions.
+This page explains how the PROVES Library system is built — from AI agents to knowledge graphs to the tools that make it all accessible.
 
 ---
 
-## Overview: Three-Layer Architecture
+## The Big Picture
+
+Think of PROVES Library as three layers working together:
 
 ```mermaid
 graph TB
-    subgraph Layer1[Knowledge Layer - Graph Database]
-        Graph[(Knowledge Graph<br/>ERV + FRAMES)]
-        Library[(Library Entries<br/>Markdown)]
-        Vector[(Vector Store<br/>Embeddings)]
+    subgraph Layer1[🗄️ Knowledge Layer]
+        Graph[(Knowledge Graph<br/>Components & Relationships)]
+        Library[(Library Entries<br/>Documentation)]
+        Vectors[(Vector Store<br/>Semantic Search)]
     end
 
-    subgraph Layer2[Intelligence Layer - AI Agents]
-        Router[Query Router]
-        Cascade[Cascade Analyzer]
+    subgraph Layer2[🤖 Intelligence Layer]
         Curator[Curator Agent]
-        Builder[Builder Agent]
-        Scanner[Risk Scanner]
+        Extractor[Extractor Sub-agent]
+        Validator[Validator Sub-agent]
+        Storage[Storage Sub-agent]
     end
 
-    subgraph Layer3[Interface Layer - MCP + Tools]
-        MCP[MCP Server<br/>Query Interface]
+    subgraph Layer3[🔌 Interface Layer]
+        MCP[MCP Server]
         VSCode[VS Code Extension]
-        CLI[Command Line Tools]
-        Web[Web Interface]
+        CLI[Command Line]
     end
 
-    subgraph Users[University Teams]
-        Team1[Team A]
-        Team2[Team B]
-        Team3[Team C]
-    end
-
-    Team1 --> VSCode
-    Team2 --> CLI
-    Team3 --> Web
-
-    VSCode --> MCP
-    CLI --> MCP
-    Web --> MCP
-
-    MCP --> Router
-    Router --> Cascade
-    Router --> Scanner
-    Cascade --> Graph
-    Scanner --> Graph
-
-    Curator --> Library
-    Builder --> Graph
-    Scanner --> Curator
-
-    Graph --> Vector
-    Library --> Vector
+    Layer3 --> Layer2
+    Layer2 --> Layer1
 
     style Graph fill:#4D96FF
-    style MCP fill:#6BCB77
-    style Router fill:#FFD93D
     style Curator fill:#E8AA42
+    style MCP fill:#6BCB77
 ```
 
-**The three layers work together:**
-
-1. **Knowledge Layer** stores relationships (graph), content (markdown), and semantics (vectors)
-2. **Intelligence Layer** uses LangGraph agents to reason over the knowledge
-3. **Interface Layer** provides MCP-based access for all tools and IDEs
+| Layer | What It Does | Key Technologies |
+|-------|--------------|------------------|
+| **Knowledge** | Stores relationships and content | PostgreSQL, pgvector, ERV schema |
+| **Intelligence** | Extracts and validates information | LangGraph, Claude Sonnet/Haiku |
+| **Interface** | Provides access to knowledge | MCP Server, VS Code, CLI |
 
 ---
 
-## Layer 1: Knowledge Graph with Engineering Semantics
+## Layer 1: The Knowledge Graph
 
-### The Problem: Not All Relationships Are Equal
+### Why a Graph?
 
-Traditional documentation treats all relationships the same. But in real systems:
-- Some dependencies are **always** required (software needs hardware)
-- Some effects are **sometimes** present (power noise affects ADC in high-TX mode)
-- Some mappings are **never** true (component X removed in version 2.0)
+Traditional documentation is flat — you search for keywords and hope to find what you need. A knowledge graph is different: it stores **relationships** between things.
 
-We need a way to model **always/sometimes/never** with full traceability.
+**Example:** If you ask "What breaks when I modify the I2C driver?"
 
-### The Solution: Engineering Relationship Vocabulary (ERV)
+- **Flat docs:** Search for "I2C" → get a list of documents
+- **Knowledge graph:** Query relationships → get a list of components that depend on I2C driver
+
+### The ERV Schema
+
+ERV (Engineering Relationship Vocabulary) defines 6 types of relationships:
 
 ```mermaid
 graph LR
-    subgraph Nodes[Node Types]
-        SW[Software<br/>Component]
-        HW[Hardware<br/>Element]
-        RES[Resource<br/>Power/Thermal]
-        PORT[Port/Interface]
+    subgraph Examples
+        A[IMU Manager] -->|depends_on| B[I2C Driver]
+        C[Component] -->|requires| D[Toolchain]
+        E[Load Switch] -->|enables| F[Sensor Power]
+        G[UART Debug] <-->|conflicts_with| H[Radio TX]
+        I[Watchdog] -->|mitigates| J[Infinite Loop]
+        K[Brownout] -->|causes| L[State Corruption]
     end
-
-    subgraph Edges[Relationship Types]
-        E1[REQUIRES<br/>Hard Dependency]
-        E2[CONFIGURES<br/>Modulates Behavior]
-        E3[CONTROLS<br/>Commands]
-        E4[CONSTRAINS<br/>Limits/Budgets]
-        E5[COUPLES_TO<br/>Sideways Cascade]
-    end
-
-    SW -->|REQUIRES| HW
-    SW -->|CONSUMES| RES
-    RES -->|CONSTRAINS| SW
-    SW -->|COUPLES_TO| SW
-
-    style SW fill:#4D96FF
-    style HW fill:#FFD93D
-    style RES fill:#FF6B6B
-    style E5 fill:#E8AA42
 ```
 
-**Every edge has 5 critical attributes:**
+| Relationship | When to Use | Example |
+|--------------|-------------|---------|
+| `depends_on` | A needs B to work at runtime | ImuManager → LinuxI2cDriver |
+| `requires` | A needs B to build/compile | Component → Toolchain |
+| `enables` | A makes B possible | LoadSwitch → SensorPower |
+| `conflicts_with` | A and B can't coexist | UARTDebug ↔ RadioTX (same pins) |
+| `mitigates` | A reduces the risk of B | WatchdogTimer → InfiniteLoop |
+| `causes` | A leads to B happening | PowerBrownout → StateCorruption |
 
-```yaml
-directionality:   Does A→B? Does B→A? Both?
-strength:         Always | Sometimes | Never
-mechanism:        electrical | thermal | timing | protocol | resource | software_state
-knownness:        Known | Assumed | Unknown | Disproved
-scope:            version_tuple, hardware_revision, mission_profile, conditions
-```
+### What Gets Stored
 
-### Example: Power Cascade Modeling
+The database has 9 tables organized into three groups:
 
-**The question:** "Why does my radio cause system resets?"
+**Knowledge Graph Tables:**
+- `kg_nodes` — Components, hardware, patterns
+- `kg_relationships` — ERV-typed edges with metadata
 
-**Traditional approach:** Search docs for "radio" + "reset" → hope to find answer
+**Library Tables:**
+- `library_entries` — Processed documentation with citations
+- `library_artifacts` — Links to source files and repos
 
-**Our approach:** Query the knowledge graph for cascade paths
-
-```mermaid
-graph TB
-    Radio[RadioTX Component] -->|CONSUMES<br/>sometimes| P1[PowerRail_3V3]
-    P1 -->|CONSTRAINS<br/>always| MCU[MCU BrownoutMargin]
-    MCU -->|COUPLES_TO<br/>sometimes| FP[FPrime Watchdog]
-    FP -->|CONSTRAINS<br/>always| DL[System Reset]
-
-    Radio -.strength: sometimes<br/>mechanism: electrical<br/>knownness: known.-> P1
-    P1 -.strength: always<br/>mechanism: electrical<br/>knownness: known.-> MCU
-    MCU -.strength: sometimes<br/>mechanism: software_state<br/>knownness: ASSUMED.-> FP
-    FP -.strength: always<br/>mechanism: timing<br/>knownness: known.-> DL
-
-    style P1 fill:#FFD93D
-    style MCU fill:#FF6B6B
-    style FP fill:#E8AA42
-```
-
-**The system returns:**
-
-Path: RadioTX → PowerRail_3V3 → MCU_Brownout → Watchdog → Reset
-
-**Evidence gap:** Edge 3 (MCU→Watchdog) marked "assumed" - no scope data confirming brownout threshold → watchdog timing
-
-**Recommended actions:**
-1. Add bulk capacitor on PowerRail_3V3 (470μF minimum)
-2. Test: Monitor power rail during TX with oscilloscope
-3. Verify: Brownout threshold in fuse bits
-
-**Similar resolved issues:** software-023, build-015
+**Agent Workflow Tables:**
+- `curator_jobs` — Extraction tasks in progress
+- `approval_queue` — Items waiting for human review
+- `checkpoints` — LangGraph agent state snapshots
 
 ---
 
-## Layer 2: LangGraph Agent Orchestration
+## Layer 2: The AI Agents
 
 ### Why LangGraph?
 
-Complex queries require **multi-step reasoning**:
-- Route query to right analyzer (cascade? semantic? hybrid?)
-- Execute graph queries
-- Trace evidence chains
-- Retrieve relevant documentation
-- Synthesize final answer
+Simple AI tasks can use a single prompt. Complex tasks need **multi-step reasoning** with decisions at each step. LangGraph provides a state machine for building these workflows.
 
-LangGraph provides a state machine for agent workflows.
+### The Sub-Agents-as-Tools Pattern
 
-### Agent Workflow Example
+Instead of one giant agent doing everything, we use specialized sub-agents:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  CURATOR AGENT (Claude Sonnet 4.5)                          │
+│  - Coordinates the workflow                                 │
+│  - Decides which sub-agent to call                          │
+│  - Requests human approval when needed                      │
+└───────┬──────────────┬──────────────┬──────────────────────┘
+        │              │              │
+        ▼              ▼              ▼
+┌───────────┐  ┌──────────┐  ┌──────────────┐
+│ EXTRACTOR │  │VALIDATOR │  │   STORAGE    │
+│(Sonnet 4.5)│  │(Haiku 3.5)│  │ (Haiku 3.5)  │
+│           │  │           │  │              │
+│ Reads docs│  │ Checks    │  │ Saves to     │
+│ finds deps│  │ quality   │  │ database     │
+└───────────┘  └──────────┘  └──────────────┘
+```
+
+**Why this pattern?**
+
+| Benefit | Explanation |
+|---------|-------------|
+| **Cost savings** | Haiku is 90% cheaper than Sonnet — use it for simple tasks |
+| **Context isolation** | Each agent only sees what it needs |
+| **Easier debugging** | Problems are localized to one sub-agent |
+| **Parallel execution** | Sub-agents can run simultaneously |
+
+### The Extraction Workflow
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Router
-
-    Router --> CascadeAnalyzer: "Why brownouts?"
-    Router --> SemanticSearch: "How to prevent?"
-    Router --> GraphQuery: "What depends on X?"
-
-    CascadeAnalyzer --> GraphDB: Find power paths
-    GraphDB --> EvidenceTracer
-    EvidenceTracer --> VectorSearch: Get docs
-    VectorSearch --> Synthesizer
-
-    SemanticSearch --> VectorDB
-    VectorDB --> Synthesizer
-
-    GraphQuery --> GraphDB
-    GraphDB --> Synthesizer
-
-    Synthesizer --> [*]: Return answer
-
-    note right of EvidenceTracer
-        Flags: unknowns, assumptions
-        Generates test backlog
-    end note
-
-    note right of Synthesizer
-        Combines:
-        - Cascade paths
-        - Evidence
-        - Documentation
-        - Confidence score
-    end note
+    [*] --> ReadDocument: Start
+    
+    ReadDocument --> ExtractDependencies: Curator calls Extractor
+    ExtractDependencies --> ValidateQuality: Found dependencies
+    
+    ValidateQuality --> CheckCriticality: Passes validation
+    ValidateQuality --> FixIssues: Fails validation
+    FixIssues --> ValidateQuality: Try again
+    
+    CheckCriticality --> StoreDirectly: LOW or MEDIUM
+    CheckCriticality --> RequestApproval: HIGH criticality
+    
+    RequestApproval --> StoreDirectly: Human approves
+    RequestApproval --> SkipItem: Human rejects
+    
+    StoreDirectly --> [*]: Complete
+    SkipItem --> [*]: Complete
 ```
 
-### The Deep Agents
+### Criticality Levels
 
-**1. Cascade Analyzer Agent**
+| Level | Meaning | Human Review? |
+|-------|---------|---------------|
+| **HIGH** | Mission-critical dependency | ✅ Required |
+| **MEDIUM** | Important but not fatal | ❌ Automatic |
+| **LOW** | Minor impact if wrong | ❌ Automatic |
 
-Specialized in finding propagation paths through resources (power, thermal, timing).
-
-```python
-Tools available:
-- GraphCascadeQuery: Find paths through resources
-- GetEdgeDetails: Retrieve 5 attributes for each edge
-- CheckEvidence: Trace evidence for claims
-- CalculateRisk: Score cascade based on unknowns
+**Example of HIGH criticality:**
 ```
-
-**2. Scanner Agent (Enhanced with Graph Reasoning)**
-
-Traditional risk scanning + graph-powered dependency checking.
-
-```python
-Capabilities:
-- Pattern matching (AST, config analysis)
-- Graph querying (missing REQUIRES edges)
-- Cascade risk detection (coupled components via shared resources)
-- Version tuple validation
-```
-
-**3. Curator Agent**
-
-Normalizes raw knowledge captures into structured library entries.
-
-```python
-Tasks:
-- Extract citations from sources
-- Suggest tags based on content
-- Detect duplicates (semantic similarity)
-- Score entry quality (0-1)
-- Learn from approval/rejection patterns
-```
-
-**4. Builder Agent (FRAMES-Aware)**
-
-Generates F´ components matched to team constraints (bounded rationality).
-
-```python
-Adapts to:
-- Team experience level (beginner → simpler code)
-- Time pressure (deadline → reference implementation)
-- Hardware constraints (available test equipment)
-
-Optimizes for:
-- Interface strength (FRAMES dimensions)
-- Near-decomposability (weak external coupling)
+LinuxI2cDriver → LinuxGpioDriver (depends_on)
+Reason: If the GPIO reset line fails, the I2C bus hangs permanently.
+        No recovery without hardware power cycle.
 ```
 
 ---
 
-## Layer 3: Hybrid RAG (Graph + Vector)
+## Layer 3: Interfaces
 
-### The Problem with Pure Vector Search
+### MCP Server (Planned)
 
-Vector embeddings are great for semantic similarity but terrible for structural queries:
+Model Context Protocol (MCP) is an open standard for AI tools to access external resources. The PROVES Library MCP server will expose:
 
-- ✅ "How do I prevent brownouts?" → Find docs on power management
-- ❌ "Show all components that depend on I2C_Bus" → Can't traverse dependencies
+```python
+# Planned endpoints
+POST /search              # Semantic + keyword search
+GET  /entry/{id}         # Fetch specific entry
+GET  /list               # Browse by category
+GET  /artifacts/{id}     # Get linked artifacts
 
-### The Problem with Pure Graph Queries
+# Knowledge graph queries
+POST /graph/query        # Query relationships
+POST /graph/cascade      # Find propagation paths
+GET  /graph/node/{id}    # Get node details
+```
 
-Graph databases excel at relationships but miss semantic nuance:
+**Why MCP?**
+- Works with VS Code Copilot, Cursor, and other AI-enabled IDEs
+- Vendor-neutral — not locked to one AI provider
+- Standardized — same interface everywhere
 
-- ✅ "Find all REQUIRES edges" → Perfect graph query
-- ❌ "What's the best practice for...?" → No semantic understanding
+### VS Code Extension (Planned)
 
-### Our Solution: Intelligent Query Routing
+The extension will provide:
+- Real-time risk scanning as you code
+- Inline warnings when modifying risky components
+- Quick links to relevant library entries
+- One-click submission of new knowledge
+
+### Command Line Tools
+
+Current Python scripts for direct access:
+
+```bash
+# Run the curator agent
+python curator-agent/run_with_approval.py
+
+# Apply database schema
+python scripts/apply_schema.py
+
+# Manage the knowledge graph
+python scripts/graph_manager.py
+```
+
+---
+
+## How Queries Work
+
+**User question:** "Why might my radio cause system resets?"
+
+### Step 1: Query Classification
+
+The system determines this is a **cascade analysis** question — we need to find propagation paths through shared resources.
+
+### Step 2: Graph Query
+
+```sql
+-- Find paths from Radio to SystemReset
+SELECT path FROM kg_relationships
+WHERE source_type = 'RadioComponent'
+  AND connects_to('SystemReset', max_depth=5)
+  AND resource_type IN ('power', 'timing');
+```
+
+### Step 3: Path Analysis
 
 ```mermaid
-graph TB
-    Query[User Query] --> Router[Query Router]
-
-    Router -->|Structural| Graph[Graph Query<br/>Cypher-like]
-    Router -->|Semantic| Vector[Vector Search<br/>Embeddings]
-    Router -->|Complex| Hybrid[Hybrid<br/>Graph + Vector]
-
-    Graph --> GraphDB[(Knowledge Graph)]
-    Vector --> VectorDB[(Vector Store)]
-    Hybrid --> GraphDB
-    Hybrid --> VectorDB
-
-    GraphDB --> Rerank[LLM Re-ranker]
-    VectorDB --> Rerank
-
-    Rerank --> Context[Context Window]
-    Context --> LLM[Claude/GPT-4]
-    LLM --> Answer[Final Answer]
-
-    style Graph fill:#4D96FF
-    style Vector fill:#6BCB77
-    style Hybrid fill:#FFD93D
+graph LR
+    A[RadioTX] -->|CONSUMES| B[PowerRail_3V3]
+    B -->|CONSTRAINS| C[MCU Brownout Margin]
+    C -->|COUPLES_TO| D[Watchdog Timer]
+    D -->|TRIGGERS| E[System Reset]
+    
+    style C fill:#FF6B6B
 ```
 
-**Query classification:**
+**Finding:** Edge 3 (MCU → Watchdog) is marked "assumed" — no test data confirms the brownout threshold triggers the watchdog.
 
-| Query Type | Example | Route To |
-|-----------|---------|----------|
-| Structural | "What depends on I2C_Bus?" | Graph |
-| Semantic | "How to prevent brownouts?" | Vector |
-| Causal | "Why does radio cause resets?" | Hybrid (cascade path + mitigation docs) |
+### Step 4: Response
+
+> Your radio may cause resets through this cascade:
+> 1. RadioTX draws high current during transmission
+> 2. Power rail voltage drops below brownout threshold
+> 3. MCU brownout detector triggers (⚠️ assumed, not tested)
+> 4. Watchdog interprets brownout as hang → reset
+>
+> **Recommended tests:**
+> - Monitor power rail with oscilloscope during TX
+> - Verify brownout threshold in fuse bits
+>
+> **Similar resolved issues:** software-023, build-015
 
 ---
 
-## Integration with FRAMES Ontology
+## Database Schema
 
-PROVES Kit Agent integrates organizational theory (FRAMES) with technical causality (ERV).
-
-### FRAMES Principles Applied
-
-**1. Bounded Rationality → Satisficing Code Generation**
-
-University teams don't optimize - they satisfice under constraints.
-
-Builder agent generates code matched to:
-- Team experience (beginner → heavily commented)
-- Time pressure (2 weeks to CDR → battle-tested reference impl)
-- Resources (no oscilloscope → simpler power design)
-
-**2. Near-Decomposability → Topology Analysis**
-
-Healthy systems: strong internal coupling, weak external coupling.
-
-Scanner detects violations:
-```python
-if external_coupling > internal_coupling:
-    flag_risk("Subsystem too tightly coupled to external components")
+```mermaid
+erDiagram
+    KG_NODES ||--o{ KG_RELATIONSHIPS : "source"
+    KG_NODES ||--o{ KG_RELATIONSHIPS : "target"
+    LIBRARY_ENTRIES ||--o{ LIBRARY_ARTIFACTS : "has"
+    CURATOR_JOBS ||--o{ APPROVAL_QUEUE : "generates"
+    
+    KG_NODES {
+        uuid id PK
+        text name
+        text node_type
+        text description
+        jsonb properties
+        vector embedding
+    }
+    
+    KG_RELATIONSHIPS {
+        uuid id PK
+        uuid source_id FK
+        uuid target_id FK
+        text relationship_type
+        text criticality
+        text evidence
+        jsonb metadata
+    }
+    
+    LIBRARY_ENTRIES {
+        uuid id PK
+        text title
+        text content
+        text source_url
+        text[] tags
+        decimal quality_score
+    }
 ```
-
-**3. Interface Strength → 6 Dimensions**
-
-ERV edges → FRAMES interface strength:
-- Frequency (from CONTROLS/CONFIGURES edges)
-- Reciprocity (from bidirectional flag)
-- Bandwidth (from message size in ports)
-- Latency (from timing mechanism)
-- Error recovery (from VERIFIED_BY edges)
-- Shared outcomes (from REQUIRES/CONSTRAINS)
-
-**4. Digital Traces → Problem-Solving Modules**
-
-Git commits → Structured problem-solving narratives:
-- Problem framing (initial commits)
-- Exploration (commits trying different approaches)
-- Dead ends (reverted commits)
-- Breakthrough (successful strategy)
-- Validation (test commits)
-
-Not just "what worked" but **"how they figured it out"**.
-
----
-
-## The Six Sweeps: Automated Validation
-
-The system runs six types of sweeps to maintain knowledge integrity:
-
-### 1. Identity Integrity Sweep
-
-**Goal:** Ensure IDENTICAL/ALIAS/EQUIVALENT claims are justified
-
-**Checks:**
-- All identity edges have `knownness: known` with evidence
-- Version tuples match current context
-- No ambiguous mappings
-
-### 2. Asymmetry Check Sweep
-
-**Goal:** Verify directionality makes engineering sense
-
-**Checks:**
-- REQUIRES edges are usually unidirectional
-- COUPLES_TO edges should be bidirectional
-- Flag suspicious patterns
-
-### 3. Cascade Path Analysis Sweep ⭐
-
-**Goal:** Trace propagation through resources
-
-**Output:** All paths from component X through resource type Y
-- Strength of each edge (always/sometimes)
-- Mechanisms involved
-- Unknown/assumed edges flagged
-- Risk score computed
-
-### 4. Unknown Edge Backlog Sweep
-
-**Goal:** Auto-generate test queue
-
-**Output:** Ranked list of edges needing verification
-- Priority based on criticality + cascade depth
-- Recommended tests (oscilloscope, code review, integration test)
-
-### 5. Version Tuple Conflicts Sweep
-
-**Goal:** Catch "works in v1, breaks in v2"
-
-**Checks:**
-- Edge scope matches current repo versions
-- Flag edges marked `strength: always` with mismatched scope
-
-### 6. Contract vs Implementation Drift Sweep
-
-**Goal:** Detect when implementations diverge from contracts
-
-**Calculates drift score (0-1):**
-- Signature match
-- Behavior match (from tests)
-- Parameter match
-- Documentation match
-
----
-
-## Example: Complete Query Flow
-
-**User:** "Why does my radio cause system resets during transmission?"
-
-### Step 1: Router Classification
-```
-Type: Cascade analysis
-Component: RadioTX
-Symptom: system_resets
-Trigger: transmission
-```
-
-### Step 2: Cascade Analyzer Query
-```cypher
-MATCH p=(start {id: 'RadioTX_Component'})-[*1..6]->(end {id: 'SystemReset'})
-WHERE ALL(r IN relationships(p) WHERE r.relation IN ['CONSUMES', 'CONSTRAINS', 'COUPLES_TO'])
-RETURN p
-```
-
-### Step 3: Results
-Path found: RadioTX → PowerRail_3V3 → MCU_Brownout → Watchdog → Reset
-
-### Step 4: Evidence Tracer
-```
-Edge 1: RadioTX CONSUMES PowerRail_3V3
-  - Evidence: Schematic section 4, power budget spreadsheet
-  - Knownness: Known
-
-Edge 2: PowerRail_3V3 CONSTRAINS MCU_BrownoutMargin
-  - Evidence: Datasheet pg 42, fuse bit configuration
-  - Knownness: Known
-
-Edge 3: MCU_Brownout COUPLES_TO Watchdog
-  - Evidence: NONE ← Gap found
-  - Knownness: Assumed
-
-Edge 4: Watchdog CONSTRAINS SystemReset
-  - Evidence: F´ watchdog component code
-  - Knownness: Known
-```
-
-### Step 5: Vector Search
-Retrieve docs on:
-- "F´ watchdog reset behavior"
-- "brownout detection best practices"
-- "power supply decoupling for radio systems"
-
-### Step 6: Synthesizer
-```markdown
-**Answer:**
-
-Your radio causes resets through this cascade:
-
-1. RadioTX draws high current during transmission (CONSUMES PowerRail_3V3)
-2. Power rail voltage drops below 3.2V (CONSTRAINS MCU_BrownoutMargin)
-3. MCU brownout detector triggers (COUPLES_TO Watchdog) ← **ASSUMED**
-4. F´ watchdog interprets as hang and resets system
-
-**Evidence gap:** Step 3 marked "assumed" - no scope data confirming brownout→watchdog timing.
-
-**Recommended actions:**
-1. Add 470μF bulk capacitor on PowerRail_3V3
-2. Reduce RadioTX duty cycle below 50%
-3. Test: Monitor power rail with oscilloscope during TX
-4. Verify: Brownout threshold correctly set in fuse bits
-
-**Similar issues resolved:**
-- software-023: Radio brownout mitigation
-- build-015: Power supply sizing for RF
-
-**Confidence:** 0.75 (lower due to assumed link at step 3)
-```
-
----
-
-## Technology Stack
-
-### Knowledge Layer
-- **Graph Database:** Neo4j or PostgreSQL + Apache AGE
-- **Vector Store:** Chroma (embedded) or Pinecone (hosted)
-- **Document Storage:** Markdown files in Git
-- **Metadata Index:** SQLite
-
-### Intelligence Layer
-- **Agent Framework:** LangGraph (state machine for multi-step reasoning)
-- **Agent Library:** LangChain (tools, prompts, memory)
-- **LLM:** Claude Sonnet 4.5 (primary), GPT-4 (fallback), local models (simple tasks)
-- **Embeddings:** sentence-transformers (all-MiniLM-L6-v2)
-
-### Interface Layer
-- **API Server:** FastAPI (Python)
-- **Protocol:** MCP (Model Context Protocol) - vendor-neutral
-- **VS Code Extension:** TypeScript
-- **CLI Tools:** Click (Python)
-
----
-
-## Performance & Scalability
-
-### Current Scale (Phase 1-2)
-- 100-500 nodes in graph
-- 50-100 library entries
-- 3-5 university teams
-- ~1,000 queries/day
-
-### Production Scale (Phase 5)
-- 10,000+ nodes
-- 500+ library entries
-- 20+ universities
-- ~50,000 queries/day
-
-### Performance Targets
-- Graph query latency: < 100ms (p95)
-- Vector search latency: < 200ms (p95)
-- Cascade analysis: < 500ms (p95)
-- Agent synthesis: < 5s (p95)
-- 99.5% uptime
-
-### Scaling Strategy
-- **Horizontal:** Load balance MCP servers
-- **Vertical:** Graph DB cluster with read replicas
-- **Caching:** 15-min TTL on cascade paths, search results
-- **Async:** Background sweep execution, async agent workflows
 
 ---
 
 ## Security & Privacy
 
-### Principles
-- **No personal attribution** - structure owns outcomes, not individuals
-- **Citations only** - no original knowledge claims, link to sources
-- **Public sources** - no proprietary code or data
-- **Versioned truth** - scope prevents "truth leakage" across contexts
+### What We Store
 
-### Implementation
-- API authentication (API keys)
-- Rate limiting (per-user quotas)
-- Input sanitization (prevent injection)
-- Audit logging (all graph modifications tracked)
+- ✅ Citations and excerpts from public documentation
+- ✅ Relationship metadata extracted by agents
+- ✅ Links to source artifacts (repos, files, lines)
+- ❌ No proprietary code
+- ❌ No personal information
+- ❌ No mission-specific secrets
+
+### Access Control
+
+- API authentication with keys
+- Rate limiting per user
+- Audit logging for all modifications
+- Human approval for HIGH criticality items
 
 ---
 
-## Next Steps
+## What's Next?
 
-Interested in the technical details?
+| Component | Status | Description |
+|-----------|--------|-------------|
+| Curator Agent | 🔄 In Development | Dependency extraction from docs |
+| Knowledge Graph | ✅ Complete | PostgreSQL + ERV schema |
+| MCP Server | 📋 Planned | Query interface for AI tools |
+| Risk Scanner | 📋 Planned | Scan repos for risk patterns |
+| VS Code Extension | 📋 Planned | IDE integration |
 
-- **[Implementation Roadmap](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/ROADMAP.md)** - 16-week plan to production
-- **[Getting Started](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/GETTING_STARTED.md)** - Set up development environment
-- **[Knowledge Graph Schema](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/docs/KNOWLEDGE_GRAPH_SCHEMA.md)** - ERV specification
-- **[Agentic Architecture](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/docs/AGENTIC_ARCHITECTURE.md)** - LangGraph + agents design
+---
+
+## Learn More
+
+- **[PROVES_LIBRARY Repository](https://github.com/Lizo-RoadTown/PROVES_LIBRARY)** — Working code
+- **[GETTING_STARTED.md](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/GETTING_STARTED.md)** — Set up in 15 minutes
+- **[CANON.md](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/CANON.md)** — Core design principles
+- **[AGENTIC_ARCHITECTURE.md](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/docs/AGENTIC_ARCHITECTURE.md)** — Deep agent design
 
 [← Back to Home](/proveskit-agent/)

@@ -1,59 +1,114 @@
 ---
 layout: article
-title: About
+title: About PROVES Library
 permalink: /about/
 key: page-about
+aside:
+  toc: true
 ---
 
-[← Back to Home](/proveskit-agent/)
+# About PROVES Library
 
-# About PROVES Kit Agent
+PROVES Library is an open-source project that uses AI agents to capture, organize, and share knowledge from CubeSat missions — preventing teams from repeating the same failures.
+
+---
 
 ## The Vision
 
-Give technical teams a shared memory and a shared way to surface mission-critical risk.
+**Every university CubeSat team should benefit from every other team's experience.**
 
----
+Right now, knowledge is trapped:
+- In Slack threads that disappear
+- In commits that nobody reads
+- In the minds of students who graduate
+- In documents that go stale
 
-## The Solution
-
-Two linked systems:
-
-1) An open source, MCP-backed living documentation library
-2) A repo risk assessment extension that checks repos and links to fixes
-
-The system owns outcomes. The library is citation-based and artifact-linked.
+PROVES Library changes this by automatically extracting knowledge and making it queryable.
 
 ---
 
 ## How It Works
 
-**The knowledge comes in three shapes:**
+```mermaid
+graph LR
+    A[📄 Documentation] -->|AI reads| B[🤖 Curator Agent]
+    B -->|Extracts| C[🔗 Dependencies]
+    C -->|Stores in| D[🗄️ Knowledge Graph]
+    D -->|Powers| E[🔍 Queries]
+```
 
-- **Build knowledge**: assembly, hardware, flight software, testing
-- **Software architecture knowledge**: F Prime architecture, ports, build, GDS
-- **Operational knowledge**: configs, tests, issue reports, fixes
-
-**Then it is curated and delivered:**
-
-- Storage: citations and excerpts, reviewed before inclusion
-- Access: MCP server for any AI tool
-- Action: IDE risk scan extension for daily checks
-
----
-
-## Why an Interrogatable Library
-
-The problem is fragmentation, even with abundant documentation:
-
-- Inside repos, knowledge splits across issues, code, and tests
-- Across teams, fixes are shared inconsistently
-- Across sources, build, software, and ops guidance are separated
-
-The library makes those fragments searchable as one system.
+1. **AI reads documentation** from F´ Framework, PROVES Kit, and university repos
+2. **Curator Agent extracts** dependencies and relationships
+3. **Humans review** mission-critical items before storage
+4. **Knowledge graph grows** with every extraction
+5. **Teams query** to find connections and avoid past mistakes
 
 ---
 
-## Status
+## The Technology
 
-This site documents the concept and research direction. The working implementation will live in a separate repository.
+| Component | What It Does |
+|-----------|--------------|
+| **LangGraph** | Orchestrates multi-step agent workflows |
+| **Claude Sonnet 4.5** | Extracts dependencies from documentation |
+| **Claude Haiku 3.5** | Validates and stores (90% cheaper) |
+| **Neon PostgreSQL** | Hosts the knowledge graph |
+| **pgvector** | Enables semantic search |
+
+---
+
+## Current Status
+
+| Phase | Status | Description |
+|-------|--------|-------------|
+| Trial Mapping | ✅ Complete | Manual analysis of 45+ dependencies |
+| Infrastructure | ✅ Complete | Database schema, utilities, checkpointing |
+| Curator Agent | 🔄 In Progress | LangGraph workflows with HITL |
+| MCP Server | 📋 Planned | Query interface for AI tools |
+| Risk Scanner | 📋 Planned | Scan repos for known patterns |
+| VS Code Extension | 📋 Planned | IDE integration |
+
+---
+
+## Who's Behind This
+
+**Elizabeth Osborn**  
+Researcher at Cal Poly Pomona  
+[eosborn@cpp.edu](mailto:eosborn@cpp.edu)
+
+This project combines:
+- **PROVES Kit** — Cal Poly's open-source CubeSat hardware
+- **F´ Framework** — NASA/JPL's flight software framework
+- **Modern AI** — LangGraph agents with Claude models
+
+---
+
+## Contributing
+
+PROVES Library is open source. Contributions welcome!
+
+- **Code:** [github.com/Lizo-RoadTown/PROVES_LIBRARY](https://github.com/Lizo-RoadTown/PROVES_LIBRARY)
+- **Issues:** Report bugs or suggest features
+- **Documentation:** Help improve the knowledge base
+
+See the [For Developers](/proveskit-agent/developers/) page for setup instructions.
+
+---
+
+## License
+
+MIT License — Use freely, contribute back.
+
+---
+
+## Acknowledgments
+
+- **NASA/JPL** — F´ flight software framework
+- **Cal Poly Pomona** — PROVES Kit CubeSat platform
+- **Anthropic** — Claude AI models
+- **LangChain** — LangGraph agent framework
+- **Neon** — Serverless PostgreSQL
+
+---
+
+[← Back to Home](/proveskit-agent/)

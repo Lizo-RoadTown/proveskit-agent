@@ -6,10 +6,8 @@ text_skin: dark # "default", "dark", "forest", "ocean", "chocolate", "orange"
 highlight_theme: tomorrow-night # "default", "tomorrow", "tomorrow-night", "tomorrow-night-eighties"
 url     : https://lizo-roadtown.github.io
 baseurl : /proveskit-agent
-title   : PROVES Kit Agent
-description: >
-  Living documentation library and repo risk scanning.
-  MCP-backed access to PROVES and F Prime knowledge.
+title   : PROVES Library
+description: >\r\n  AI-powered knowledge capture for CubeSat missions.\r\n  LangGraph agents extract dependencies and build a queryable knowledge graph.
 
 ## => Language and Timezone
 ##############################
@@ -149,3 +147,4 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-seo-tag
+
