@@ -1,17 +1,13 @@
 ---
 layout: article
-title: Technical Details
+title: Technical Architecture
 permalink: /technical/
 key: page-technical
-aside:
-  toc: true
 ---
 
-[← Back to Home](/proveskit-agent/)
+# Technical Architecture
 
-# Technical Details
-
-This page covers the implementation details of PROVES Library — the data models, agent workflows, and system integration.
+The PROVES Kit Agent system architecture, implementation details, and F'Prime integration.
 
 ---
 
@@ -19,467 +15,384 @@ This page covers the implementation details of PROVES Library — the data model
 
 ```mermaid
 graph TB
-    subgraph Sources[📄 Documentation Sources]
-        FPrime[F´ Framework Docs]
-        PROVES[PROVES Kit Docs]
-        PySquared[PySquared Docs]
+    subgraph User["User Interface"]
+        CLI["CLI / IDE Plugin"]
+        Web["Web Interface"]
     end
 
-    subgraph Agents[🤖 LangGraph Agent System]
-        Curator[Curator Agent<br/>Claude Sonnet 4.5]
-        Extractor[Extractor<br/>Sonnet 4.5]
-        Validator[Validator<br/>Haiku 3.5]
-        Storage[Storage<br/>Haiku 3.5]
+    subgraph Orchestrator["Agent Orchestrator"]
+        Router["Request Router"]
+        Context["Context Manager"]
     end
 
-    subgraph Database[🗄️ Neon PostgreSQL]
-        KGNodes[(kg_nodes)]
-        KGRels[(kg_relationships)]
-        Library[(library_entries)]
-        Checkpoints[(checkpoints)]
+    subgraph Agents["Specialized Agents"]
+        ReqAgent["Requirement<br/>Analyzer"]
+        GenAgent["Component<br/>Generator"]
+        DocAgent["Documentation<br/>Agent"]
+        ReviewAgent["Code Review<br/>Agent"]
     end
 
-    subgraph Interfaces[🔌 Interfaces]
-        MCP[MCP Server<br/>Planned]
-        VSCode[VS Code Extension<br/>Planned]
-        CLI[CLI Tools<br/>Available]
+    subgraph FPrime["F'Prime Integration"]
+        FPP["FPP Parser"]
+        CodeGen["F'Prime Autocoder"]
+        Build["fprime-util"]
     end
 
-    Sources --> Curator
-    Curator --> Extractor
-    Curator --> Validator
-    Curator --> Storage
-    Storage --> Database
-    Database --> Interfaces
+    subgraph Knowledge["Knowledge Base"]
+        Patterns["F'Prime Patterns"]
+        Examples["Component Examples"]
+        Docs["F'Prime Docs"]
+    end
 
-    style Curator fill:#E8AA42
-    style Database fill:#4D96FF
-```
-
----
-
-## Data Models
-
-### Knowledge Graph Nodes
-
-```sql
-CREATE TABLE kg_nodes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    node_type TEXT NOT NULL,  -- 'component', 'hardware', 'pattern', 'resource'
-    description TEXT,
-    properties JSONB DEFAULT '{}',
-    embedding VECTOR(1536),   -- For semantic search
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-**Node Types:**
-
-| Type | Description | Example |
-|------|-------------|---------|
-| `component` | Software component | ImuManager, RadioDriver |
-| `hardware` | Physical hardware | MPU-6050, TCA9548A |
-| `pattern` | Design pattern or anti-pattern | I2C Conflict, Power Cascade |
-| `resource` | Shared resource | PowerRail_3V3, I2C_Bus |
-
-### Knowledge Graph Relationships
-
-```sql
-CREATE TABLE kg_relationships (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    source_id UUID REFERENCES kg_nodes(id),
-    target_id UUID REFERENCES kg_nodes(id),
-    relationship_type TEXT NOT NULL,  -- ERV types
-    criticality TEXT DEFAULT 'MEDIUM',
-    evidence TEXT,
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE TYPE relationship_type AS ENUM (
-    'depends_on',      -- Runtime dependency
-    'requires',        -- Build-time requirement
-    'enables',         -- Makes possible
-    'conflicts_with',  -- Cannot coexist
-    'mitigates',       -- Reduces risk
-    'causes'           -- Leads to
-);
-```
-
-### Library Entries
-
-```sql
-CREATE TABLE library_entries (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    title TEXT NOT NULL,
-    slug TEXT UNIQUE,
-    entry_type TEXT,      -- 'guide', 'pattern', 'lesson', 'reference'
-    domain TEXT,          -- 'hardware', 'software', 'operations'
-    content TEXT,
-    summary TEXT,
-    tags TEXT[],
-    sources TEXT[],       -- Citation URLs
-    quality_score DECIMAL(3,2),
-    embedding VECTOR(1536),
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+    User --> Orchestrator
+    Orchestrator --> Agents
+    Agents --> FPrime
+    Agents --> Knowledge
 ```
 
 ---
 
 ## Agent Architecture
 
-### The Sub-Agents-as-Tools Pattern
+### Multi-Agent System
 
-```python
-# curator-agent/src/curator/agent.py
+Similar to **FRAMES**, uses specialized agents coordinated by an orchestrator:
 
-from langgraph.graph import StateGraph, END
-from langchain_anthropic import ChatAnthropic
+| Agent | Purpose | Inputs | Outputs |
+|-------|---------|--------|---------|
+| **Requirement Analyzer** | Extract component specs from natural language | User description, context | Structured requirements |
+| **Component Generator** | Create F'Prime components | Requirements, patterns | `.fpp`, C++, tests |
+| **Documentation Agent** | Generate ICDs and tables | Component definitions | Markdown docs |
+| **Review Agent** | Validate F'Prime patterns | Source code, topology | Issue report, suggestions |
 
-# Main curator uses Sonnet for complex reasoning
-curator_llm = ChatAnthropic(model="claude-sonnet-4-20250514")
+### Orchestrator
 
-# Sub-agents use Haiku for simple tasks (90% cheaper)
-validator_llm = ChatAnthropic(model="claude-3-5-haiku-20241022")
-storage_llm = ChatAnthropic(model="claude-3-5-haiku-20241022")
+**Responsibilities:**
+- Route user requests to appropriate agent(s)
+- Manage conversation context and state
+- Coordinate multi-agent workflows
+- Integrate agent outputs
 
-# Extractor needs Sonnet for accurate extraction
-extractor_llm = ChatAnthropic(model="claude-sonnet-4-20250514")
+**Example workflow:**
 ```
-
-### Agent State
-
-```python
-from typing import TypedDict, List, Optional
-
-class CuratorState(TypedDict):
-    # Input
-    document_path: str
-    document_content: str
-    
-    # Extraction results
-    extracted_dependencies: List[dict]
-    validation_results: List[dict]
-    
-    # Approval tracking
-    pending_approval: List[dict]
-    approved_items: List[dict]
-    rejected_items: List[dict]
-    
-    # Status
-    current_step: str
-    error: Optional[str]
-```
-
-### Workflow Graph
-
-```python
-from langgraph.graph import StateGraph
-
-workflow = StateGraph(CuratorState)
-
-# Add nodes
-workflow.add_node("read_document", read_document)
-workflow.add_node("extract_dependencies", extract_dependencies)
-workflow.add_node("validate_quality", validate_quality)
-workflow.add_node("check_criticality", check_criticality)
-workflow.add_node("request_approval", request_approval)
-workflow.add_node("store_results", store_results)
-
-# Add edges
-workflow.add_edge("read_document", "extract_dependencies")
-workflow.add_edge("extract_dependencies", "validate_quality")
-workflow.add_edge("validate_quality", "check_criticality")
-
-# Conditional edge based on criticality
-workflow.add_conditional_edges(
-    "check_criticality",
-    route_by_criticality,
-    {
-        "needs_approval": "request_approval",
-        "auto_approve": "store_results"
-    }
-)
-
-workflow.add_edge("request_approval", "store_results")
-workflow.add_edge("store_results", END)
+User: "Create temperature sensor component"
+  ↓
+Orchestrator → Requirement Analyzer
+  → Extract: sensor type, telemetry, commands, events
+  ↓
+Orchestrator → Component Generator
+  → Generate: .fpp, C++, tests
+  ↓
+Orchestrator → Documentation Agent
+  → Generate: ICD, command table
+  ↓
+User: Receives complete component package
 ```
 
 ---
 
-## Human-in-the-Loop (HITL)
+## F'Prime Integration
 
-### Criticality-Based Routing
+### FPP (F Prime Prime) Parsing
 
-```python
-def route_by_criticality(state: CuratorState) -> str:
-    """Route based on highest criticality in pending items."""
-    for dep in state["extracted_dependencies"]:
-        if dep["criticality"] == "HIGH":
-            return "needs_approval"
-    return "auto_approve"
+The agent understands F'Prime's component definition language:
+
+**Input FPP:**
+```fpp
+active component TempSensor {
+  telemetry Temperature: F32
+  event TemperatureThreshold(temp: F32) severity warning high
+  command ReadTemperature() async
+}
 ```
 
-### Approval Interface
+**Agent extracts:**
+- Component type (active)
+- Ports (implicit)
+- Telemetry channels
+- Events with severity
+- Commands with synchronicity
 
-```python
-def request_approval(state: CuratorState) -> CuratorState:
-    """Present HIGH criticality items for human review."""
-    pending = [d for d in state["extracted_dependencies"] 
-               if d["criticality"] == "HIGH"]
-    
-    approved = []
-    rejected = []
-    
-    for dep in pending:
-        print(f"\n[CURATOR] Found HIGH criticality dependency:")
-        print(f"  {dep['source']} → {dep['target']} ({dep['relationship']})")
-        print(f"  Evidence: {dep['evidence']}")
-        print(f"  Reason: {dep['reason']}")
-        
-        response = input("\n  Approve? [y/n]: ").strip().lower()
-        
-        if response == 'y':
-            approved.append(dep)
-        else:
-            rejected.append(dep)
-    
-    return {
-        **state,
-        "approved_items": approved,
-        "rejected_items": rejected
-    }
+### Code Generation
+
+Leverages F'Prime autocoding patterns:
+
+1. Parse `.fpp` component definition
+2. Generate C++ using F'Prime templates
+3. Scaffold handlers with TODO markers
+4. Create unit test framework
+
+**Generated structure:**
+```
+TempSensor/
+├── TempSensor.fpp          # Component definition
+├── TempSensor.cpp          # Implementation
+├── TempSensor.hpp          # Header
+└── test/
+    ├── TesterBase.cpp      # Auto-generated test base
+    └── TempSensorTest.cpp  # Custom tests
 ```
 
----
+### Build Integration
 
-## Database Operations
+Works with `fprime-util`:
 
-### Connection Pooling
+```bash
+# Agent generates component
+agent generate-component "TempSensor"
 
-```python
-# scripts/db_connector.py
-
-import os
-from psycopg_pool import ConnectionPool
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-pool = ConnectionPool(
-    DATABASE_URL,
-    min_size=1,
-    max_size=10,
-    timeout=30
-)
-
-def execute_query(query: str, params: tuple = None):
-    """Execute query with connection from pool."""
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, params)
-            if cur.description:
-                return cur.fetchall()
-            conn.commit()
-```
-
-### Graph Manager
-
-```python
-# scripts/graph_manager.py
-
-class GraphManager:
-    def create_node(self, name: str, node_type: str, 
-                    description: str = None, properties: dict = None) -> str:
-        """Create a knowledge graph node."""
-        query = """
-            INSERT INTO kg_nodes (name, node_type, description, properties)
-            VALUES (%s, %s, %s, %s)
-            RETURNING id
-        """
-        result = execute_query(query, (name, node_type, description, 
-                                       json.dumps(properties or {})))
-        return str(result[0][0])
-    
-    def create_relationship(self, source_id: str, target_id: str,
-                           relationship_type: str, criticality: str = "MEDIUM",
-                           evidence: str = None) -> str:
-        """Create an ERV relationship between nodes."""
-        query = """
-            INSERT INTO kg_relationships 
-            (source_id, target_id, relationship_type, criticality, evidence)
-            VALUES (%s, %s, %s, %s, %s)
-            RETURNING id
-        """
-        return execute_query(query, (source_id, target_id, 
-                                    relationship_type, criticality, evidence))
-    
-    def get_dependencies(self, node_name: str) -> list:
-        """Get all nodes that depend on the given node."""
-        query = """
-            SELECT n.name, r.relationship_type, r.criticality
-            FROM kg_relationships r
-            JOIN kg_nodes n ON r.source_id = n.id
-            JOIN kg_nodes target ON r.target_id = target.id
-            WHERE target.name = %s
-        """
-        return execute_query(query, (node_name,))
+# Use standard F'Prime build
+cd TempSensor
+fprime-util build
+fprime-util check  # Run unit tests
 ```
 
 ---
 
-## LangGraph Checkpointing
+## Knowledge Base
 
-### State Persistence
+### F'Prime Pattern Library
 
-```python
-# scripts/setup_checkpointer.py
+Agent trained on common F'Prime patterns:
 
-from langgraph.checkpoint.postgres import PostgresSaver
+**Component patterns:**
+- Active vs. passive components
+- Port types and connections
+- Command handlers
+- Telemetry channels
+- Event logging
 
-checkpointer = PostgresSaver.from_conn_string(DATABASE_URL)
+**Topology patterns:**
+- Component instantiation
+- Connection graphs
+- Thread allocation
+- Buffer management
 
-# Create tables for checkpointing
-checkpointer.setup()
+### Example Repository
+
+Agent references PROVES Kit components:
+
+- Real flight software examples
+- Validated patterns
+- Documented design decisions
+- Test strategies
+
+### F'Prime Documentation
+
+Integrated access to:
+- F'Prime User Manual
+- API documentation
+- Best practices guides
+- Common pitfalls
+
+---
+
+## Implementation Stack
+
+### Language Models
+
+**Primary:** Claude 3.5 Sonnet (Anthropic)
+- Strong code generation
+- Excellent context handling
+- Reliable structured outputs
+
+**Specialized tasks:**
+- Requirement extraction: Claude 3 Haiku (fast, cost-effective)
+- Code review: Claude 3.5 Sonnet (detailed analysis)
+
+### Prompt Engineering
+
+**Key techniques:**
+- Few-shot learning with F'Prime examples
+- Structured output formats (JSON schemas)
+- Chain-of-thought for complex components
+- Validation loops for correctness
+
+### Tool Integration
+
+**F'Prime tools:**
+- `fprime-util` for build/test
+- `fpp-to-cpp` for autocoding
+- `fpp-check` for validation
+
+**Development tools:**
+- Git for version control
+- VSCode extension (planned)
+- CLI for scripting
+
+---
+
+## Data Flow
+
+### Component Generation Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Orchestrator
+    participant ReqAgent
+    participant GenAgent
+    participant FPrime
+
+    User->>Orchestrator: "Create temp sensor"
+    Orchestrator->>ReqAgent: Analyze requirements
+    ReqAgent->>Orchestrator: Structured specs
+    Orchestrator->>GenAgent: Generate component
+    GenAgent->>FPrime: Use FPP templates
+    FPrime->>GenAgent: Generated files
+    GenAgent->>Orchestrator: Component package
+    Orchestrator->>User: .fpp, .cpp, tests, docs
 ```
 
-### Using Checkpoints
+### Documentation Generation Flow
 
-```python
-# Resume from checkpoint
-config = {"configurable": {"thread_id": "extraction-job-001"}}
+```mermaid
+sequenceDiagram
+    participant User
+    participant Orchestrator
+    participant DocAgent
+    participant FPrime
 
-# Run with checkpointing
-result = workflow.invoke(initial_state, config=config)
-
-# Later: resume if interrupted
-result = workflow.invoke(None, config=config)  # Resumes from last checkpoint
+    User->>Orchestrator: "Document TempSensor.fpp"
+    Orchestrator->>DocAgent: Parse component
+    DocAgent->>FPrime: Read .fpp definition
+    FPrime->>DocAgent: Parsed AST
+    DocAgent->>DocAgent: Extract interfaces
+    DocAgent->>Orchestrator: Generated docs
+    Orchestrator->>User: ICD.md, tables
 ```
 
 ---
 
-## Planned: MCP Server
+## Quality Assurance
 
-### Endpoint Design
+### Validation Strategies
 
-```python
-# Planned: mcp_server/main.py
+**Syntax validation:**
+- Run `fpp-check` on generated `.fpp`
+- Verify C++ compiles with `fprime-util build`
+- Check test scaffolds are valid
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+**Pattern validation:**
+- Compare to F'Prime style guide
+- Verify port connection types
+- Check thread safety in active components
 
-app = FastAPI(title="PROVES Library MCP Server")
+**Semantic validation:**
+- Does generated component match requirements?
+- Are interfaces complete?
+- Do tests cover key scenarios?
 
-class SearchRequest(BaseModel):
-    query: str
-    filters: dict = {}
-    limit: int = 10
+### Human-in-the-Loop
 
-@app.post("/search")
-async def search(request: SearchRequest):
-    """Semantic + keyword search across library."""
-    results = await search_library(
-        query=request.query,
-        filters=request.filters,
-        limit=request.limit
-    )
-    return {"results": results}
-
-@app.get("/entry/{entry_id}")
-async def get_entry(entry_id: str):
-    """Fetch a specific library entry."""
-    return await fetch_entry(entry_id)
-
-@app.post("/graph/query")
-async def graph_query(query: dict):
-    """Query the knowledge graph."""
-    return await execute_graph_query(query)
-
-@app.post("/graph/cascade")
-async def cascade_analysis(start_node: str, resource_type: str):
-    """Find cascade paths through shared resources."""
-    return await find_cascade_paths(start_node, resource_type)
-```
+**Critical checkpoints:**
+1. **Requirements review** — Before generation
+2. **Code review** — After generation
+3. **Test validation** — Before flight qualification
+4. **Documentation review** — Before release
 
 ---
 
-## Planned: Risk Scanner
+## Performance Considerations
 
-### Pattern Definition
+### Response Time
 
-```python
-# Planned: risk_scanner/patterns.py
+**Typical latencies:**
+- Requirement analysis: ~2-5 seconds
+- Component generation: ~10-20 seconds
+- Documentation: ~5-10 seconds
+- Code review: ~15-30 seconds
 
-RISK_PATTERNS = [
-    {
-        "id": "i2c_address_conflict",
-        "name": "I2C Address Conflict",
-        "description": "Multiple devices with same I2C address",
-        "severity": "HIGH",
-        "detection": {
-            "type": "ast_pattern",
-            "language": "python",
-            "pattern": "I2C.*address.*0x[0-9a-fA-F]+"
-        },
-        "mitigation": "Use TCA9548A multiplexer or change device address"
-    },
-    {
-        "id": "power_budget_exceeded",
-        "name": "Power Budget Exceeded",
-        "description": "Total power draw exceeds available budget",
-        "severity": "HIGH",
-        "detection": {
-            "type": "config_check",
-            "check": "sum(component_power) > power_budget"
-        },
-        "mitigation": "Reduce duty cycles or add power storage"
-    }
-]
-```
+**Optimization:**
+- Cache common patterns
+- Parallel agent execution where possible
+- Incremental updates for docs
 
-### Scanner Workflow
+### Cost Optimization
 
-```python
-# Planned: risk_scanner/scanner.py
+**Token efficiency:**
+- Use Haiku for simple tasks
+- Structured outputs reduce token waste
+- Cache F'Prime documentation
 
-async def scan_repository(repo_path: str) -> list:
-    """Scan a repository for known risk patterns."""
-    risks_found = []
-    
-    for pattern in RISK_PATTERNS:
-        matches = await detect_pattern(repo_path, pattern)
-        for match in matches:
-            risks_found.append({
-                "pattern": pattern["id"],
-                "severity": pattern["severity"],
-                "location": match["file"] + ":" + str(match["line"]),
-                "mitigation": pattern["mitigation"]
-            })
-    
-    return risks_found
-```
+**Batch operations:**
+- Generate multiple components in one session
+- Bulk documentation updates
 
 ---
 
-## Technology Stack
+## Future Directions
 
-| Component | Technology | Version |
-|-----------|------------|---------|
-| **Agent Framework** | LangGraph | 0.2.x |
-| **LLM Provider** | Anthropic Claude | Sonnet 4.5, Haiku 3.5 |
-| **Database** | Neon PostgreSQL | 16 |
-| **Vector Search** | pgvector | 0.7.x |
-| **Tracing** | LangSmith | Optional |
-| **Language** | Python | 3.11+ |
+### Planned Features
+
+**Topology Assistant:**
+- Suggest component connections
+- Validate topology graphs
+- Generate deployment diagrams
+
+**Integration Testing:**
+- Generate integration test scenarios
+- Mock component interactions
+- Hardware-in-loop test support
+
+**Knowledge Capture:**
+- Extract design rationale from commits
+- Build institutional knowledge graph
+- Support team transitions
+
+### Research Questions
+
+**Validation:**
+- How accurate is agent-generated code vs. human-written?
+- Does it actually accelerate development?
+- What failure modes occur?
+
+**Adoption:**
+- What workflows benefit most from agents?
+- What tasks should remain human-only?
+- How to build trust in generated code?
 
 ---
 
-## Learn More
+## Open Source
 
-- **[Architecture](/proveskit-agent/architecture/)** — System design overview
-- **[For Developers](/proveskit-agent/developers/)** — Setup and contribution guide
-- **[PROVES_LIBRARY Repository](https://github.com/Lizo-RoadTown/PROVES_LIBRARY)** — Source code
+**Status:** In development
 
-[← Back to Home](/proveskit-agent/)
+**Planned release:**
+- Agent orchestrator framework
+- F'Prime integration tools
+- Example prompts and patterns
+- VSCode extension
+
+**Repository:** TBD on PROVES Kit GitHub
+
+---
+
+## Technical Resources
+
+**Architecture documentation:**
+- Agent design patterns
+- F'Prime integration guide
+- Deployment instructions
+
+**Developer guide:**
+- Adding new agents
+- Customizing prompts
+- Extending knowledge base
+
+**API reference:**
+- Orchestrator API
+- Agent interfaces
+- Tool integration
+
+---
+
+## Contact
+
+**Technical questions:**
+Elizabeth Osborn | [eosborn@cpp.edu](mailto:eosborn@cpp.edu)
+
+**Related projects:**
+- [FRAMES Architecture](https://lizo-roadtown.github.io/Portfolio/technical/) — Similar multi-agent framework
+- [PROVES Kit](https://github.com/proveskit) — F'Prime components and missions
+- [F'Prime](https://github.com/nasa/fprime) — NASA's flight software framework

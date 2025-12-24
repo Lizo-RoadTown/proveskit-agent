@@ -1,4 +1,4 @@
-﻿# PROVES Kit Agent Portfolio - TeXt Theme Configuration
+# PROVES Kit Agent Portfolio - TeXt Theme Configuration
 
 ## => Site Settings
 ##############################
@@ -6,10 +6,10 @@ text_skin: dark # "default", "dark", "forest", "ocean", "chocolate", "orange"
 highlight_theme: tomorrow-night # "default", "tomorrow", "tomorrow-night", "tomorrow-night-eighties"
 url     : https://lizo-roadtown.github.io
 baseurl : /proveskit-agent
-title   : PROVES Library
-description: >-
-  AI-powered knowledge capture for CubeSat missions.
-  LangGraph agents extract dependencies and build a queryable knowledge graph.
+title   : PROVES Kit Agent
+description: >
+  Agentic AI for F'Prime Flight Software Development.
+  Intelligent agents supporting CubeSat mission engineering workflows.
 
 ## => Language and Timezone
 ##############################
@@ -22,7 +22,7 @@ author:
   type      : person
   name      : Elizabeth Osborn
   url       : https://lizo-roadtown.github.io/proveskit-agent
-  bio       : Researcher developing agentic curation systems for mission knowledge
+  bio       : Researcher developing AI agents for flight software engineering
   email     : eosborn@cpp.edu
   github    : Lizo-RoadTown
   linkedin  : # add if you have one
@@ -40,26 +40,6 @@ paths:
   archive : /archive.html
   rss     : /feed.xml
 
-## => Navigation
-##############################
-header:
-  theme: dark
-navigation:
-  - url: /proveskit-agent/
-    title: Home
-  - url: /proveskit-agent/about/
-    title: About
-  - url: /proveskit-agent/living-library/
-    title: Living Library
-  - url: /proveskit-agent/architecture/
-    title: Architecture
-  - url: /proveskit-agent/technical/
-    title: Technical
-  - url: /proveskit-agent/developers/
-    title: Developers
-  - url: /proveskit-agent/researchers/
-    title: Researchers
-
 ## => Post
 ##############################
 excerpt_separator: <!--more-->
@@ -73,7 +53,7 @@ toc:
 ##############################
 mathjax: true
 mathjax_autoNumber: false
-mermaid: false
+mermaid: false  # Disabled - using custom Mermaid v10 in head/custom.html instead
 chart: false
 
 ## => Paginate

@@ -1,54 +1,52 @@
 # PROVES Kit Agent
 
-Living documentation and repo risk scanning
+Agentic AI for F'Prime Flight Software Development
 
 ## Overview
 
-This repository contains the portfolio site for **PROVES Kit Agent**, an open source MCP-backed knowledge system and repo risk scan concept.
+This repository contains the portfolio site for **PROVES Kit Agent**, an intelligent assistant system designed to support CubeSat mission engineers working with NASA's F'Prime flight software framework.
 
 **Live site:** https://lizo-roadtown.github.io/proveskit-agent
 
 ## What is PROVES Kit Agent?
 
-Two linked systems:
+An AI agent system that helps F'Prime developers:
 
-- Living documentation library (MCP-backed, citations and excerpts)
-- IDE risk scan extension for mission-critical issues
+- Generate F'Prime components from natural language requirements
+- Auto-draft interface control documents and command/telemetry tables
+- Review code for F'Prime pattern compliance
+- Capture design knowledge for team transitions
 
-This repository is an open source scrapbook for the concept and documentation. The working implementation will live in a separate repository.
+## PROVES Kit Project
 
-## Core Sources
+This agent supports the **PROVES Kit** multi-university collaboration developing open-source CubeSat payloads and bus systems using F'Prime.
 
-**Build knowledge**
-- PROVES Kit documentation: https://docs.proveskit.space/en/latest/
+**PROVES Kit GitHub:** https://github.com/proveskit
 
-**Software architecture knowledge**
-- F Prime documentation: https://fprime.jpl.nasa.gov/latest/docs/
-
-**Operational knowledge**
-- Open source repos (citations and excerpts)
+**Partner Universities:**
+Cal Poly Pomona · Columbia University · Texas State University · Virginia Tech · Washington State University · University of Illinois · Northeastern University · Mt. San Antonio College
 
 ## Portfolio Structure
 
 ```
 proveskit-agent/
-|-- index.md                    # Homepage
-|-- about.md                    # About the project
-|-- pages/
-|   |-- developers.md           # For developers
-|   |-- researchers.md          # For researchers
-|   |-- technical.md            # Architecture for MCP + risk scan
-|   |-- component-generation.md # Archive concept page
-|   `-- living-library.md       # Living documentation and risk scan
-|-- demos/                      # Example workflows (planned)
-`-- docs/                       # Research notes
+├── index.md                    # Homepage
+├── pages/
+│   ├── developers.md          # For F'Prime developers
+│   ├── researchers.md         # For AI/SE researchers
+│   ├── technical.md           # Agent architecture
+│   ├── component-generation.md # Component generation details
+│   ├── documentation.md       # Documentation capabilities
+│   └── code-review.md         # Code review features
+├── demos/                     # Example workflows (planned)
+└── docs/                      # Technical documentation (planned)
 ```
 
 ## Technology Stack
 
 **Site:** Jekyll with TeXt theme
-**Library access:** MCP server + search index
-**Client:** IDE extension
+**Agent:** Claude 3.5 Sonnet (Anthropic)
+**Integration:** F'Prime autocoding toolchain
 
 ## Local Development
 
@@ -75,6 +73,18 @@ bundle exec jekyll serve
 bundle exec jekyll build
 ```
 
+## Relationship to FRAMES
+
+PROVES Kit Agent shares architectural patterns with **FRAMES** (Framework for Research & Analytics in Mission Engineering Systems):
+
+| | FRAMES | PROVES Kit Agent |
+|---|--------|------------------|
+| **Domain** | Organizational analysis | Flight software development |
+| **Problem** | Predict mission risk | Accelerate F'Prime workflows |
+| **Agents** | Map vulnerabilities | Generate components, docs |
+
+**FRAMES Portfolio:** https://lizo-roadtown.github.io/Portfolio
+
 ## Contributing
 
 This portfolio is actively being developed. Contributions welcome:
@@ -98,5 +108,6 @@ Agent code: TBD (will be open source)
 ## Acknowledgments
 
 - NASA JPL for F'Prime
+- PROVES Kit partner universities
 - Anthropic for Claude
 - TeXt theme by Tian Qi

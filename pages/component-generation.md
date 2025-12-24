@@ -1,13 +1,11 @@
 ---
 layout: article
-title: Component Generation (Archive)
+title: Component Generation
 permalink: /component-generation/
 key: page-component-generation
 ---
 
 # F'Prime Component Generation
-
-**Archive note:** This page captures early concept work. The current project focus is the MCP-backed living documentation library and the repo risk scan extension.
 
 The Component Generator agent creates F'Prime components from natural language specifications.
 
@@ -394,6 +392,28 @@ After receiving generated component:
 
 ---
 
+## Limitations
+
+**Agent cannot:**
+- Implement hardware-specific code (BSP, drivers)
+- Design complex algorithms (must provide pseudocode)
+- Determine optimal thread allocation
+- Validate flight safety requirements
+
+**Agent helps with:**
+- Boilerplate F'Prime code
+- Interface definitions
+- Documentation structure
+- Test scaffolding
+
+**Human must:**
+- Review all generated code
+- Implement business logic
+- Validate against requirements
+- Perform integration testing
+
+---
+
 ## Examples
 
 ### Example 1: GPS Receiver
@@ -435,4 +455,4 @@ After receiving generated component:
 
 - Try generating your first component: [For Developers →](/proveskit-agent/developers/)
 - Understand the technical details: [Architecture →](/proveskit-agent/technical/)
-- See the living library: [Living Documentation Library](/proveskit-agent/living-library/)
+- See documentation capabilities: [Documentation Support →](/proveskit-agent/documentation/)

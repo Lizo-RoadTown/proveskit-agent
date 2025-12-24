@@ -1,246 +1,200 @@
 ---
-layout: landing
-title: PROVES Library
-permalink: /
-header:
+layout: article
+title: PROVES Kit Agent
+key: page-home
+article_header:
+  type: overlay
   theme: dark
+  background_color: '#1e1e2e'
+  background_image:
+    gradient: 'linear-gradient(135deg, rgba(30, 30, 46, 0.8), rgba(30, 30, 46, 0.6))'
+    src: /assets/images/hero-banner.png
 ---
 
-# 🛰️ PROVES Library
+# Agentic AI for F'Prime Flight Software Development
 
-**AI-powered knowledge capture for CubeSat missions**
-
-Building a satellite is hard. Building one without repeating past mistakes is harder. PROVES Library uses AI agents to capture, organize, and share knowledge so every university team can learn from each other.
-
----
-
-## The Problem: Knowledge Gets Lost
-
-University CubeSat programs face a tough reality:
-
-| Challenge | Impact |
-|-----------|--------|
-| **Fragmented knowledge** | Fixes live in Slack threads, commits, and graduation memories |
-| **Hidden dependencies** | Changing power code breaks I2C sensors two weeks before launch |
-| **Isolated teams** | Every university discovers the same failures independently |
-| **Time pressure** | No time to document when you're racing toward launch |
-
-**The result:** 88% of university CubeSat programs fail from organizational issues, not technical ones. The knowledge exists — it's just not accessible.
+**PROVES Kit Agent** is an intelligent assistant system designed to support CubeSat mission engineers working with NASA's **F'Prime** (F´) flight software framework.
 
 ---
 
-## The Solution: AI-Powered Knowledge Capture
+## The Challenge
+
+F'Prime development involves complex workflows across multiple domains:
+
+- **Component development** — Writing flight-ready C++ components with ports, commands, telemetry, and events
+- **Topology design** — Connecting components into deployable flight software architectures
+- **Documentation** — Maintaining technical specifications, interface definitions, and requirements traceability
+- **Testing & validation** — Unit tests, integration tests, and flight qualification procedures
+- **Knowledge transfer** — Onboarding new team members to F'Prime patterns and mission-specific architectures
+
+University CubeSat programs face additional challenges: **student rotation creates constant knowledge loss**, and **teams must deliver flight-qualified software with limited prior experience**.
+
+---
+
+## What PROVES Kit Agent Does
+
+An agentic AI system that assists F'Prime developers through the full development lifecycle:
 
 ```mermaid
-graph TB
-    subgraph Sources[📄 Documentation]
-        FPrime[F´ Framework<br/>NASA/JPL flight software]
-        PROVES[PROVES Kit<br/>Cal Poly CubeSat hardware]
-        PySquared[PySquared<br/>STEM Flight Computers]
+graph LR
+    subgraph AGENT["PROVES KIT AGENT"]
+        A["Analyze<br/>requirements"]
+        B["Generate<br/>components"]
+        C["Draft<br/>documentation"]
+        D["Suggest<br/>tests"]
     end
 
-    subgraph Agents[🤖 AI Agents - LangGraph + Claude]
-        Curator[Curator Agent<br/>Extracts dependencies]
-        Validator[Validator<br/>Checks quality]
-        Storage[Storage Agent<br/>Saves to database]
-    end
-
-    subgraph KnowledgeBase[🗄️ Knowledge Graph]
-        Nodes[Components & Hardware]
-        Edges[Relationships & Dependencies]
-        Library[Library Entries]
-    end
-
-    FPrime --> Curator
-    PROVES --> Curator
-    PySquared --> Curator
-    
-    Curator --> Validator
-    Validator --> Storage
-    Storage --> KnowledgeBase
-
-    style Curator fill:#E8AA42
-    style KnowledgeBase fill:#4D96FF
+    A --> B --> C --> D
 ```
 
-**How it works:**
-1. **AI reads documentation** — Curator Agent extracts dependencies and relationships
-2. **Human reviews critical items** — HIGH criticality dependencies need approval
-3. **Knowledge graph grows** — Structured data makes relationships queryable
-4. **Teams benefit** — Query the graph to find hidden connections
+| Capability | Description |
+|------------|-------------|
+| **Component Generation** | Draft F'Prime components from specifications with proper port definitions |
+| **Documentation Support** | Auto-generate interface definitions, command dictionaries, telemetry tables |
+| **Code Review** | Check F'Prime patterns, detect common errors, suggest improvements |
+| **Knowledge Capture** | Extract design decisions and rationale from code and commit history |
 
 ---
 
-## What Makes This Different
+## How It Works
 
-### 🧠 Intelligence, Not Automation
+### Agent Architecture
 
-The Curator Agent doesn't just copy text — it **understands** relationships:
+Built on the same multi-agent framework as **FRAMES**, but applied to F'Prime engineering workflows:
 
-```
-Input:  "The I2C driver requires the LinuxGpioDriver for reset functionality"
-Output: 
-  - Source: LinuxI2cDriver
-  - Target: LinuxGpioDriver  
-  - Relationship: depends_on
-  - Criticality: HIGH
-  - Evidence: Line 47-52, I2C_Driver.md
-```
+- **Requirement Analyzer** — Extracts component specifications from natural language or documents
+- **Component Generator** — Creates F'Prime `.fpp` files, C++ implementations, and test scaffolds
+- **Documentation Agent** — Maintains interface specifications and requirements traceability
+- **Review Agent** — Validates F'Prime patterns, checks port connections, identifies issues
 
-### 🔗 Structured Knowledge Graph
+### Integration with F'Prime
 
-Not just documents — a queryable graph with 6 relationship types:
+Works directly with F'Prime tooling:
 
-| Relationship | Meaning | Example |
-|--------------|---------|---------|
-| `depends_on` | Runtime dependency | IMU Manager → I2C Driver |
-| `requires` | Build-time requirement | Component → Toolchain |
-| `enables` | Makes possible | Load Switch → Sensor Power |
-| `conflicts_with` | Cannot coexist | UART Debug ↔ Radio TX |
-| `mitigates` | Reduces risk | Watchdog → Infinite Loop |
-| `causes` | Leads to | Brownout → State Corruption |
-
-### 👤 Human-in-the-Loop
-
-Mission-critical dependencies require human approval before storage:
-
-```
-[CURATOR] Found HIGH criticality dependency:
-  LinuxI2cDriver → LinuxGpioDriver (depends_on)
-  Reason: Reset line timing failure = I2C bus hang
-  
-  Approve? [y/n]
-```
+- Reads `.fpp` (F Prime Prime) component and topology definitions
+- Generates compliant C++ code following F'Prime patterns
+- Integrates with `fprime-util` build and test workflows
+- Supports F'Prime autocoding and component templates
 
 ---
 
-## Current Architecture
+## PROVES Kit Project
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    PROVES Library System                        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  📄 Documentation Sources                                       │
-│     ├── F´ Framework (NASA/JPL flight software)                │
-│     └── PROVES Kit (Cal Poly Pomona CubeSat hardware)          │
-│                          ↓                                      │
-│  🤖 Deep Agent System (LangGraph + Claude)                      │
-│     ┌─────────────────────────────────────────┐                │
-│     │  Main Curator Agent (Sonnet 4.5)        │                │
-│     │     ↓ spawns as tools                   │                │
-│     │  ├── Extractor (Sonnet 4.5)             │                │
-│     │  ├── Validator (Haiku 3.5) ← 90% cheaper│                │
-│     │  └── Storage   (Haiku 3.5) ← 90% cheaper│                │
-│     └─────────────────────────────────────────┘                │
-│                          ↓                                      │
-│  👤 Human-in-the-Loop (HITL)                                    │
-│     └── HIGH criticality deps require approval                 │
-│                          ↓                                      │
-│  🗄️ Neon PostgreSQL + pgvector                                 │
-│     ├── kg_nodes (components, hardware, patterns)              │
-│     ├── kg_relationships (ERV dependency types)                │
-│     └── library_entries (source documentation)                 │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+This agent system supports the **PROVES Kit** multi-university collaboration:
 
-### Why This Design?
+**[PROVES Kit on GitHub →](https://github.com/proveskit)**
 
-| Decision | Rationale |
-|----------|-----------|
-| **Sub-agents as tools** | Each agent is an expert at one thing |
-| **Haiku for simple tasks** | 90% cost savings on validation/storage |
-| **Sonnet for extraction** | Complex reasoning where quality matters |
-| **HITL for HIGH criticality** | Mission-critical deps need human eyes |
+PROVES Kit develops open-source payloads and bus systems for CubeSat missions, using F'Prime as the flight software framework. Partner universities include:
+
+Cal Poly Pomona · Columbia University · Texas State University · Virginia Tech · Washington State University · University of Illinois · Northeastern University · Mt. San Antonio College
 
 ---
 
-## Project Status (December 2025)
+## Key Features
 
-### ✅ Phase 1: Trial Mapping — COMPLETE
-- Analyzed F´ I2C Driver (411 lines) + PROVES Kit Power Management (154 lines)
-- **Found 45+ dependencies** with exact line citations
-- **Discovered 4 critical cross-system dependencies** undocumented anywhere
-- **Identified 5 knowledge gaps** (timing specs, voltage requirements, error recovery)
+<div class="card-grid card-grid-2">
 
-### ✅ Phase 2: Infrastructure — COMPLETE
-- Neon PostgreSQL database with 9-table knowledge graph schema
-- LangGraph checkpointer for agent state persistence
-- Python utilities for database management
+<div class="card">
+<h3>F'Prime Component Generator</h3>
+<p>Generate components from natural language requirements—ports, commands, telemetry, events, and parameters.</p>
+<p><a href="/proveskit-agent/component-generation/">Learn more →</a></p>
+</div>
 
-### 🔄 Phase 3: Curator Agent — IN DEVELOPMENT
-- LangGraph orchestration with sub-agents-as-tools pattern
-- Claude Sonnet 4.5 (curator/extractor) + Haiku 3.5 (validator/storage)
-- Human-in-the-loop for HIGH criticality dependencies
-- **Current focus:** Autonomous document exploration
+<div class="card">
+<h3>Interactive Documentation</h3>
+<p>Auto-draft interface control documents, command dictionaries, and telemetry tables from component definitions.</p>
+<p><a href="/proveskit-agent/documentation/">Learn more →</a></p>
+</div>
 
-### 📋 Phase 4: Planned Features
-- **MCP Server** — Model Context Protocol endpoints for AI tool access
-- **Risk Scanner** — Scan repos for known risk patterns
-- **VS Code Extension** — IDE integration for real-time scanning
-- **Training Pipeline** — Local LLM fine-tuning for CubeSat domain
+<div class="card">
+<h3>Code Review Assistant</h3>
+<p>Validate F'Prime patterns, check topology connections, and suggest improvements.</p>
+<p><a href="/proveskit-agent/code-review/">Learn more →</a></p>
+</div>
 
----
+<div class="card">
+<h3>Knowledge Capture</h3>
+<p>Extract design rationale from commit history and conversations to support team transitions.</p>
+<p><a href="/proveskit-agent/knowledge-capture/">Learn more →</a></p>
+</div>
 
-## Who Is This For?
-
-### 🎓 Students Starting a CubeSat Program
-
-> "What mistakes did other teams make with power systems?"
-
-Query the knowledge graph to learn from others before making the same errors.
-
-### 🔧 Developers Building Flight Software
-
-> "What happens if I change this I2C driver?"
-
-Trace dependencies to understand cascading effects before they break things.
-
-### 🤖 AI/ML Engineers Interested in Agents
-
-> "How do you build agents that work with humans?"
-
-Study the LangGraph patterns, sub-agent architecture, and HITL workflows.
-
-### 🛰️ CubeSat Enthusiasts
-
-> "How does all this space stuff fit together?"
-
-Explore the knowledge graph to understand how components connect.
+</div>
 
 ---
 
-## Technology Stack
+## Why F'Prime?
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **AI Framework** | LangGraph | Agent orchestration and workflows |
-| **LLM** | Claude Sonnet 4.5 + Haiku 3.5 | Extraction and validation |
-| **Database** | Neon PostgreSQL + pgvector | Knowledge graph with semantic search |
-| **Tracing** | LangSmith (optional) | Agent debugging and monitoring |
-| **Language** | Python 3.11+ | All agent and utility code |
+**F'Prime** is NASA JPL's open-source flight software framework, designed for CubeSats and small spacecraft:
+
+- **Component-based architecture** — Reusable, testable software modules
+- **Cross-platform** — Runs on Linux, embedded targets, and flight processors
+- **Flight-proven** — Used on Mars Helicopter, multiple CubeSat missions
+- **Autocoding** — Generate C++ from high-level component specifications
+
+[F'Prime Documentation →](https://fprime.jpl.nasa.gov/)
+[F'Prime GitHub →](https://github.com/nasa/fprime)
 
 ---
 
-## Learn More
+## Getting Started
 
-- **[Living Library](/proveskit-agent/living-library/)** — How knowledge gets captured and organized
-- **[Architecture](/proveskit-agent/architecture/)** — Deep dive into knowledge graph + agents
-- **[Technical](/proveskit-agent/technical/)** — System design and data flow
-- **[For Developers](/proveskit-agent/developers/)** — How to use and contribute
-- **[For Researchers](/proveskit-agent/researchers/)** — Research questions and evaluation
+<div class="card-grid card-grid-3">
 
-**Implementation:**
-- [PROVES_LIBRARY Repository](https://github.com/Lizo-RoadTown/PROVES_LIBRARY) — Working code
-- [GETTING_STARTED.md](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/GETTING_STARTED.md) — Set up in 15 minutes
-- [CANON.md](https://github.com/Lizo-RoadTown/PROVES_LIBRARY/blob/master/CANON.md) — Core principles and patterns
+<div class="card">
+<h3>For Developers</h3>
+<p><em>If you're writing F'Prime components and topologies:</em></p>
+<p>Use the agent to draft components, generate documentation, and review code.</p>
+<p><a href="/proveskit-agent/developers/">Get started →</a></p>
+</div>
+
+<div class="card">
+<h3>For Researchers</h3>
+<p><em>If you study AI for software engineering or knowledge transfer:</em></p>
+<p>Explore the agent architecture, prompt engineering, and validation methods.</p>
+<p><a href="/proveskit-agent/researchers/">Learn more →</a></p>
+</div>
+
+<div class="card">
+<h3>Technical Details</h3>
+<p><em>If you want to understand the implementation:</em></p>
+<p>Agent workflows, F'Prime integration, and system architecture.</p>
+<p><a href="/proveskit-agent/technical/">Learn more →</a></p>
+</div>
+
+</div>
+
+---
+
+## Relationship to FRAMES
+
+This agent system shares architectural DNA with **FRAMES** (Framework for Research & Analytics in Mission Engineering Systems), but addresses a different problem:
+
+| | FRAMES | PROVES Kit Agent |
+|---|--------|------------------|
+| **Domain** | Organizational structure analysis | Flight software development |
+| **Problem** | Predict mission risk from team structure | Accelerate F'Prime engineering workflows |
+| **Users** | Program administrators, researchers | F'Prime developers, CubeSat teams |
+| **Agents** | Map interfaces, predict vulnerabilities | Generate components, draft docs, review code |
+
+Both systems use multi-agent AI architectures to support complex engineering missions, but operate on different problem sets.
+
+[Learn more about FRAMES →](https://lizo-roadtown.github.io/Portfolio/)
+
+---
+
+## Status
+
+**In Development** — This portfolio documents the design and development of the PROVES Kit Agent system.
+
+The agent architecture is being developed in parallel with PROVES Kit flight software to ensure practical utility for real CubeSat missions.
 
 ---
 
 ## Contact
 
-**Elizabeth Osborn** | Cal Poly Pomona  
+**Elizabeth Osborn** | Cal Poly Pomona
 [eosborn@cpp.edu](mailto:eosborn@cpp.edu)
+Available for collaboration, research discussions, and graduate program inquiries.
 
-**Project Status:** Active development | December 2025
+[PROVES Kit GitHub →](https://github.com/proveskit)
+[F'Prime Documentation →](https://fprime.jpl.nasa.gov/)
