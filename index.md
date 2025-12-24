@@ -11,190 +11,86 @@ article_header:
     src: /assets/images/hero-banner.png
 ---
 
-# Agentic AI for F'Prime Flight Software Development
+# PROVES Kit Agent: Agentic Knowledge Capture for CubeSat Missions
 
-**PROVES Kit Agent** is an intelligent assistant system designed to support CubeSat mission engineers working with NASA's **F'Prime** (F´) flight software framework.
-
----
-
-## The Challenge
-
-F'Prime development involves complex workflows across multiple domains:
-
-- **Component development** — Writing flight-ready C++ components with ports, commands, telemetry, and events
-- **Topology design** — Connecting components into deployable flight software architectures
-- **Documentation** — Maintaining technical specifications, interface definitions, and requirements traceability
-- **Testing & validation** — Unit tests, integration tests, and flight qualification procedures
-- **Knowledge transfer** — Onboarding new team members to F'Prime patterns and mission-specific architectures
-
-University CubeSat programs face additional challenges: **student rotation creates constant knowledge loss**, and **teams must deliver flight-qualified software with limited prior experience**.
+PROVES Kit Agent is the public-facing agentic system that powers the PROVES Library knowledge graph for CubeSat teams. It captures hidden dependencies from documentation, routes them through human verification, and exposes a queryable truth graph through MCP.
 
 ---
 
-## What PROVES Kit Agent Does
+## The Problem
 
-An agentic AI system that assists F'Prime developers through the full development lifecycle:
+University missions fail for organizational reasons more often than technical ones:
+
+- Knowledge is fragmented across docs, repos, and graduating cohorts
+- Cross-system dependencies stay hidden until late integration
+- Teams repeat the same failures without shared institutional memory
+
+---
+
+## What It Does Today
+
+- **Curator agent** extracts dependencies from F Prime and PROVES Kit docs
+- **LangGraph orchestration** coordinates extractor, validator, and storage sub-agents
+- **Truth layer gating** ensures only human-verified data enters the graph
+- **Neon knowledge graph** stores ERV relationships with evidence and lineage
+- **MCP server** exposes the graph and docs to VS Code, CLI, and other agents
 
 ```mermaid
-graph LR
-    subgraph AGENT["PROVES KIT AGENT"]
-        A["Analyze<br/>requirements"]
-        B["Generate<br/>components"]
-        C["Draft<br/>documentation"]
-        D["Suggest<br/>tests"]
-    end
-
-    A --> B --> C --> D
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart TB
+  A[Raw Sources] --> B[Extractor Agent]
+  B --> C[Validator Agent]
+  C --> D[Decision Maker]
+  D --> E[Human Verification]
+  E --> F[Truth Graph]
+  F --> G[GNN Risk Layer]
+  G --> H[Mission Ops Risk Assessment]
 ```
 
-| Capability | Description |
-|------------|-------------|
-| **Component Generation** | Draft F'Prime components from specifications with proper port definitions |
-| **Documentation Support** | Auto-generate interface definitions, command dictionaries, telemetry tables |
-| **Code Review** | Check F'Prime patterns, detect common errors, suggest improvements |
-| **Knowledge Capture** | Extract design decisions and rationale from code and commit history |
+---
+
+## MCP Server: The Interface CubeSat Teams Use
+
+The MCP server is the single query interface to the knowledge graph and documentation RAG layer. It enables:
+
+- Graph queries and cascade analysis for cross-system risks
+- Evidence tracing for every dependency claim
+- Tooling integrations (VS Code, CLI, custom agents)
 
 ---
 
-## How It Works
+## GNN Risk Layer (Proves_AI)
 
-### Agent Architecture
+The truth graph is the training substrate for a graph neural network risk model:
 
-Built on the same multi-agent framework as **FRAMES**, but applied to F'Prime engineering workflows:
+- GraphSAGE for cascade and graph risk scoring
+- XGBoost baseline for mission success prediction
+- Cross-encoder reranker for retrieval quality
 
-- **Requirement Analyzer** — Extracts component specifications from natural language or documents
-- **Component Generator** — Creates F'Prime `.fpp` files, C++ implementations, and test scaffolds
-- **Documentation Agent** — Maintains interface specifications and requirements traceability
-- **Review Agent** — Validates F'Prime patterns, checks port connections, identifies issues
-
-### Integration with F'Prime
-
-Works directly with F'Prime tooling:
-
-- Reads `.fpp` (F Prime Prime) component and topology definitions
-- Generates compliant C++ code following F'Prime patterns
-- Integrates with `fprime-util` build and test workflows
-- Supports F'Prime autocoding and component templates
+See the scaffold repo: https://github.com/Lizo-RoadTown/Proves_AI
 
 ---
 
-## PROVES Kit Project
+## Explore the System
 
-This agent system supports the **PROVES Kit** multi-university collaboration:
-
-**[PROVES Kit on GitHub →](https://github.com/proveskit)**
-
-PROVES Kit develops open-source payloads and bus systems for CubeSat missions, using F'Prime as the flight software framework. Partner universities include:
-
-Cal Poly Pomona · Columbia University · Texas State University · Virginia Tech · Washington State University · University of Illinois · Northeastern University · Mt. San Antonio College
-
----
-
-## Key Features
-
-<div class="card-grid card-grid-2">
-
-<div class="card">
-<h3>F'Prime Component Generator</h3>
-<p>Generate components from natural language requirements—ports, commands, telemetry, events, and parameters.</p>
-<p><a href="/proveskit-agent/component-generation/">Learn more →</a></p>
-</div>
-
-<div class="card">
-<h3>Interactive Documentation</h3>
-<p>Auto-draft interface control documents, command dictionaries, and telemetry tables from component definitions.</p>
-<p><a href="/proveskit-agent/documentation/">Learn more →</a></p>
-</div>
-
-<div class="card">
-<h3>Code Review Assistant</h3>
-<p>Validate F'Prime patterns, check topology connections, and suggest improvements.</p>
-<p><a href="/proveskit-agent/code-review/">Learn more →</a></p>
-</div>
-
-<div class="card">
-<h3>Knowledge Capture</h3>
-<p>Extract design rationale from commit history and conversations to support team transitions.</p>
-<p><a href="/proveskit-agent/knowledge-capture/">Learn more →</a></p>
-</div>
-
-</div>
-
----
-
-## Why F'Prime?
-
-**F'Prime** is NASA JPL's open-source flight software framework, designed for CubeSats and small spacecraft:
-
-- **Component-based architecture** — Reusable, testable software modules
-- **Cross-platform** — Runs on Linux, embedded targets, and flight processors
-- **Flight-proven** — Used on Mars Helicopter, multiple CubeSat missions
-- **Autocoding** — Generate C++ from high-level component specifications
-
-[F'Prime Documentation →](https://fprime.jpl.nasa.gov/)
-[F'Prime GitHub →](https://github.com/nasa/fprime)
-
----
-
-## Getting Started
-
-<div class="card-grid card-grid-3">
-
-<div class="card">
-<h3>For Developers</h3>
-<p><em>If you're writing F'Prime components and topologies:</em></p>
-<p>Use the agent to draft components, generate documentation, and review code.</p>
-<p><a href="/proveskit-agent/developers/">Get started →</a></p>
-</div>
-
-<div class="card">
-<h3>For Researchers</h3>
-<p><em>If you study AI for software engineering or knowledge transfer:</em></p>
-<p>Explore the agent architecture, prompt engineering, and validation methods.</p>
-<p><a href="/proveskit-agent/researchers/">Learn more →</a></p>
-</div>
-
-<div class="card">
-<h3>Technical Details</h3>
-<p><em>If you want to understand the implementation:</em></p>
-<p>Agent workflows, F'Prime integration, and system architecture.</p>
-<p><a href="/proveskit-agent/technical/">Learn more →</a></p>
-</div>
-
-</div>
-
----
-
-## Relationship to FRAMES
-
-This agent system shares architectural DNA with **FRAMES** (Framework for Research & Analytics in Mission Engineering Systems), but addresses a different problem:
-
-| | FRAMES | PROVES Kit Agent |
-|---|--------|------------------|
-| **Domain** | Organizational structure analysis | Flight software development |
-| **Problem** | Predict mission risk from team structure | Accelerate F'Prime engineering workflows |
-| **Users** | Program administrators, researchers | F'Prime developers, CubeSat teams |
-| **Agents** | Map interfaces, predict vulnerabilities | Generate components, draft docs, review code |
-
-Both systems use multi-agent AI architectures to support complex engineering missions, but operate on different problem sets.
-
-[Learn more about FRAMES →](https://lizo-roadtown.github.io/Portfolio/)
+- System architecture: /proveskit-agent/architecture/
+- Technical details: /proveskit-agent/technical/
+- For developers: /proveskit-agent/developers/
+- For researchers: /proveskit-agent/researchers/
+- Implementation repo: https://github.com/Lizo-RoadTown/PROVES_LIBRARY
 
 ---
 
 ## Status
 
-**In Development** — This portfolio documents the design and development of the PROVES Kit Agent system.
-
-The agent architecture is being developed in parallel with PROVES Kit flight software to ensure practical utility for real CubeSat missions.
+- **Trial mapping complete:** 45+ dependencies from F Prime I2C and PROVES power docs
+- **Infrastructure complete:** Neon graph schema + LangGraph checkpointer
+- **Curator agent active:** sub-agent workflow and HITL verification
+- **GNN pipeline started:** Proves_AI scaffold in progress
 
 ---
 
 ## Contact
 
-**Elizabeth Osborn** | Cal Poly Pomona
+**Elizabeth Osborn** | Cal Poly Pomona  
 [eosborn@cpp.edu](mailto:eosborn@cpp.edu)
-Available for collaboration, research discussions, and graduate program inquiries.
-
-[PROVES Kit GitHub →](https://github.com/proveskit)
-[F'Prime Documentation →](https://fprime.jpl.nasa.gov/)

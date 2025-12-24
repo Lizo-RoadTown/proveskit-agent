@@ -5,48 +5,44 @@ permalink: /living-library/
 key: page-living-library
 ---
 
-[← Back to Home](/proveskit-agent/)
+[Back to Home](/proveskit-agent/)
 
 # Living Documentation Library
 
-The PROVES Kit Agent now includes a deeper layer of "living" documentation that users can interrogate beyond the first-layer docs.
-
-The core idea is simple: the structure owns outcomes. Entries are citation-based and artifact-linked.
+The PROVES Library is the living documentation layer behind PROVES Kit Agent. Entries are citation-based, artifact-linked, and queryable through MCP.
 
 ---
 
 ## The Fragmentation Problem
 
-Knowledge is fragmented in predictable ways:
+Knowledge fragments in predictable ways:
 
-- **Inside repos**: issues, commits, and tests each hold part of the story.
-- **Across teams**: the same failures repeat because fixes are shared inconsistently.
-- **Across sources**: PROVES hardware guidance, F Prime architecture, and ops fixes are separated.
-- **Across time**: context fades when teams rotate or projects pause.
-
-The library is built to make those fragments interrogatable as one system.
+- Inside repos: issues, commits, tests each hold part of the story
+- Across teams: fixes repeat because lessons are not shared
+- Across sources: PROVES hardware guidance and F Prime docs are separated
+- Across time: context fades when teams rotate or projects pause
 
 ---
 
 ## What It Is
 
-Think of it as three types of knowledge, unified:
+Three knowledge layers, unified:
 
-- **Build knowledge**: assembly, hardware, flight software, and testing references
-- **Software architecture knowledge**: F Prime architecture, ports, build, and GDS
-- **Operational knowledge**: configs, test results, issue reports, and fixes
+- Build knowledge: assembly, hardware, flight software, testing references
+- Software architecture: F Prime architecture, ports, build, and GDS
+- Operational knowledge: configs, issue reports, test results, fixes
 
-The library is exposed through an MCP server so any AI system in IDEs can query it without needing to know where the information originally lived.
+MCP exposes this library to IDEs and agents without needing to know where the info originally lived.
 
 ---
 
-## Where the Library Lives
+## Where It Lives
 
-The canonical library is an open source repository that stores reviewed entries in plain text (Markdown with small metadata blocks).
+The canonical library is the PROVES Library repository:
 
-The MCP server builds its search index from that repo.
+https://github.com/Lizo-RoadTown/PROVES_LIBRARY
 
-The implementation will live in its own repository (TBD), separate from this scrapbook site.
+The MCP server indexes this repo to serve structured queries.
 
 ---
 
@@ -56,15 +52,13 @@ The implementation will live in its own repository (TBD), separate from this scr
 - Citations and excerpts
 - Reviewed before inclusion
 
-This keeps the library open, verifiable, and safe to share.
-
 ---
 
 ## What Users Get
 
 - A stable first layer of docs for onboarding
 - A deeper layer that answers "what happened before?" and "where is the fix?"
-- Search results that point to real artifacts (repo paths, tests, components, or docs)
+- Search results that point to real artifacts (repo paths, tests, docs)
 
 ---
 
@@ -72,12 +66,10 @@ This keeps the library open, verifiable, and safe to share.
 
 Users can run a daily or per-commit risk scan in an IDE:
 
-1. The extension queries the MCP library for known risk patterns.
-2. It scans the repo for matches.
-3. It surfaces likely mission-critical issues with links to fixes.
-4. It can contribute new patterns or lessons back to the library.
-
-Entries are citation-based.
+1. Query MCP for known risk patterns
+2. Scan the repo for matches
+3. Surface likely mission-critical issues with links to fixes
+4. Contribute new lessons back to the library
 
 ---
 
@@ -96,6 +88,4 @@ Entry
 
 ## Why This Works
 
-Users get immediate value (risk scans and fixes), while the library grows over time and supports every team.
-
-This makes knowledge sharing safer and more useful, which is the best incentive to participate.
+Teams get immediate value (risk scans and fixes) while the library grows over time and supports every mission.

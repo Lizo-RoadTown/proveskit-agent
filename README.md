@@ -1,113 +1,69 @@
 # PROVES Kit Agent
 
-Agentic AI for F'Prime Flight Software Development
-
-## Overview
-
-This repository contains the portfolio site for **PROVES Kit Agent**, an intelligent assistant system designed to support CubeSat mission engineers working with NASA's F'Prime flight software framework.
+Agentic knowledge capture for CubeSat missions, backed by PROVES Library.
 
 **Live site:** https://lizo-roadtown.github.io/proveskit-agent
 
 ## What is PROVES Kit Agent?
 
-An AI agent system that helps F'Prime developers:
+This repository hosts the portfolio site for the PROVES Kit Agent system. The live implementation and knowledge graph live in PROVES Library.
 
-- Generate F'Prime components from natural language requirements
-- Auto-draft interface control documents and command/telemetry tables
-- Review code for F'Prime pattern compliance
-- Capture design knowledge for team transitions
+Key capabilities:
 
-## PROVES Kit Project
+- Curator agent for dependency extraction
+- Human-in-the-loop truth layer
+- MCP server for graph and evidence queries
+- GNN risk modeling scaffold (Proves_AI)
 
-This agent supports the **PROVES Kit** multi-university collaboration developing open-source CubeSat payloads and bus systems using F'Prime.
+## Core Repos
 
-**PROVES Kit GitHub:** https://github.com/proveskit
-
-**Partner Universities:**
-Cal Poly Pomona · Columbia University · Texas State University · Virginia Tech · Washington State University · University of Illinois · Northeastern University · Mt. San Antonio College
+- PROVES Library: https://github.com/Lizo-RoadTown/PROVES_LIBRARY
+- Proves_AI (GNN stack): https://github.com/Lizo-RoadTown/Proves_AI
 
 ## Portfolio Structure
 
 ```
 proveskit-agent/
-├── index.md                    # Homepage
-├── pages/
-│   ├── developers.md          # For F'Prime developers
-│   ├── researchers.md         # For AI/SE researchers
-│   ├── technical.md           # Agent architecture
-│   ├── component-generation.md # Component generation details
-│   ├── documentation.md       # Documentation capabilities
-│   └── code-review.md         # Code review features
-├── demos/                     # Example workflows (planned)
-└── docs/                      # Technical documentation (planned)
+  index.md                 # Homepage
+  pages/
+    about.md               # Vision and relationships
+    living-library.md      # PROVES Library overview
+    architecture.md        # System architecture
+    technical.md           # Technical details
+    developers.md          # Developer guide
+    researchers.md         # Research guide
 ```
 
 ## Technology Stack
 
 **Site:** Jekyll with TeXt theme
-**Agent:** Claude 3.5 Sonnet (Anthropic)
-**Integration:** F'Prime autocoding toolchain
+**Backend:** LangGraph agents, Neon PostgreSQL, MCP server
+**ML Stack:** GraphSAGE, XGBoost, reranker (in Proves_AI)
 
 ## Local Development
 
-### Prerequisites
-
-- Ruby 2.7+
-- Bundler
-
-### Setup
-
 ```bash
-# Install dependencies
 bundle install
-
-# Run local server
 bundle exec jekyll serve
-
-# View at http://localhost:4000/proveskit-agent
 ```
 
-### Build
-
-```bash
-bundle exec jekyll build
-```
+View at http://localhost:4000/proveskit-agent
 
 ## Relationship to FRAMES
 
-PROVES Kit Agent shares architectural patterns with **FRAMES** (Framework for Research & Analytics in Mission Engineering Systems):
+PROVES Kit Agent shares architectural patterns with FRAMES (Framework for Research and Analytics in Mission Engineering Systems):
 
-| | FRAMES | PROVES Kit Agent |
-|---|--------|------------------|
-| **Domain** | Organizational analysis | Flight software development |
-| **Problem** | Predict mission risk | Accelerate F'Prime workflows |
-| **Agents** | Map vulnerabilities | Generate components, docs |
+- FRAMES focuses on organizational risk modeling
+- PROVES Kit Agent focuses on dependency capture and mission risk mitigation
 
-**FRAMES Portfolio:** https://lizo-roadtown.github.io/Portfolio
-
-## Contributing
-
-This portfolio is actively being developed. Contributions welcome:
-
-- Documentation improvements
-- Example workflows
-- Use case studies
-- Research findings
+FRAMES portfolio: https://lizo-roadtown.github.io/Portfolio
 
 ## Contact
 
-**Elizabeth Osborn**
+Elizabeth Osborn
 Cal Poly Pomona
-eosborn@cpp.edu
+[eosborn@cpp.edu](mailto:eosborn@cpp.edu)
 
 ## License
 
 Portfolio content: CC-BY-NC-4.0
-Agent code: TBD (will be open source)
-
-## Acknowledgments
-
-- NASA JPL for F'Prime
-- PROVES Kit partner universities
-- Anthropic for Claude
-- TeXt theme by Tian Qi

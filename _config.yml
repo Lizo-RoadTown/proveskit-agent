@@ -8,8 +8,8 @@ url     : https://lizo-roadtown.github.io
 baseurl : /proveskit-agent
 title   : PROVES Kit Agent
 description: >
-  Agentic AI for F'Prime Flight Software Development.
-  Intelligent agents supporting CubeSat mission engineering workflows.
+  Agentic knowledge capture for CubeSat missions.
+  MCP-accessible truth graph with GNN risk modeling.
 
 ## => Language and Timezone
 ##############################
@@ -22,7 +22,7 @@ author:
   type      : person
   name      : Elizabeth Osborn
   url       : https://lizo-roadtown.github.io/proveskit-agent
-  bio       : Researcher developing AI agents for flight software engineering
+  bio       : Researcher developing agentic curation systems for mission knowledge
   email     : eosborn@cpp.edu
   github    : Lizo-RoadTown
   linkedin  : # add if you have one
