@@ -1,0 +1,22 @@
+header:
+  - titles:
+      en: Home
+    url: /
+  - titles:
+      en: About
+    url: /about/
+  - titles:
+      en: Living Library
+    url: /living-library/
+  - titles:
+      en: Architecture
+    url: /architecture/
+  - titles:
+      en: Technical
+    url: /technical/
+  - titles:
+      en: Developers
+    url: /developers/
+  - titles:
+      en: Researchers
+    url: /researchers/
