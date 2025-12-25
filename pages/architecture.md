@@ -64,6 +64,57 @@ flowchart TB
 
 ---
 
+## Theory Layer: From Systems to Graph to GNN
+
+We layer social and organizational theory with nearly-decomposable architecture to model how interfaces, couplings, and bonds create dependency structure across three layers:
+
+- **Organizational layer**: teams, handoffs, ownership boundaries
+- **Digital layer**: software components, APIs, protocols, data flow
+- **Physical layer**: hardware, power, timing, thermal constraints
+
+That structure becomes a rich dependency graph, which is the training substrate for GNN models.
+
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart TB
+  subgraph Layers[Three System Layers]
+    Org[Organizational Layer]
+    Dig[Digital Layer]
+    Phys[Physical Layer]
+  end
+
+  subgraph Theory[Theory and Structure]
+    NDA[Nearly-Decomposable Architecture]
+    IFC[Interfaces, Couplings, Bonds]
+  end
+
+  subgraph Graph[Dependency Graph]
+    Nodes[Components and Actors]
+    Edges[Relations and Evidence]
+  end
+
+  subgraph GNN[GNN Models]
+    Risk[Risk Scoring]
+    Cascade[Cascade Prediction]
+    Outcomes[Mission Outcomes]
+  end
+
+  Org --> NDA
+  Dig --> NDA
+  Phys --> NDA
+  NDA --> IFC
+  IFC --> Nodes
+  IFC --> Edges
+  Nodes --> Risk
+  Edges --> Risk
+  Nodes --> Cascade
+  Edges --> Cascade
+  Risk --> Outcomes
+  Cascade --> Outcomes
+```
+
+---
+
 ## MCP Query Lifecycle
 
 ```mermaid
