@@ -34,6 +34,18 @@ Three knowledge layers, unified:
 
 MCP exposes this library to IDEs and agents without needing to know where the info originally lived.
 
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart TB
+  Build[Build Knowledge]
+  Arch[Software Architecture]
+  Ops[Operational Knowledge]
+  Build --> Library[(PROVES Library)]
+  Arch --> Library
+  Ops --> Library
+  Library --> MCP[MCP Server]
+```
+
 ---
 
 ## Where It Lives
@@ -43,6 +55,14 @@ The canonical library is the PROVES Library repository:
 https://github.com/Lizo-RoadTown/PROVES_LIBRARY
 
 The MCP server indexes this repo to serve structured queries.
+
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart LR
+  Repo[PROVES Library Repo] --> Index[MCP Indexer]
+  Index --> MCP[MCP Server]
+  MCP --> Tools[IDE and Agent Tools]
+```
 
 ---
 

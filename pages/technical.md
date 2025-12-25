@@ -18,6 +18,16 @@ Implementation details for the PROVES Kit Agent system (backed by PROVES Library
 - **LangGraph checkpointer tables** for agent state persistence
 - **Vector store** for retrieval (pgvector or external)
 
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart TB
+  Raw[Raw Captures] --> Staging[Staging Tables]
+  Staging --> Truth[(Truth Graph)]
+  Truth --> Vector[(Vector Store)]
+  Check[LangGraph Checkpointer] --> Runs[Agent Runs]
+  Runs --> Staging
+```
+
 ---
 
 ## Curator Workflow (LangGraph)
@@ -49,6 +59,17 @@ MCP provides a single interface for graph and RAG queries:
 - `/graph/evidence` for citation chains and provenance
 
 This enables IDE tooling, CLI access, and other agents to share the same source of truth.
+
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart LR
+  MCP[MCP Server]
+  MCP --> Search[/search]
+  MCP --> Entry[/entry/{id}]
+  MCP --> Graph[/graph/query]
+  MCP --> Cascade[/graph/cascade]
+  MCP --> Evidence[/graph/evidence]
+```
 
 ---
 

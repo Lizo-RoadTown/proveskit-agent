@@ -57,6 +57,20 @@ The MCP server is the single query interface to the knowledge graph and document
 - Evidence tracing for every dependency claim
 - Tooling integrations (VS Code, CLI, custom agents)
 
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart LR
+  VS[VS Code] --> MCP[MCP Server]
+  CLI[CLI Tools] --> MCP
+  Agent[Custom Agents] --> MCP
+
+  MCP --> Graph[(Truth Graph)]
+  MCP --> RAG[RAG Docs]
+
+  Graph --> Evidence[Evidence Links]
+  RAG --> Evidence
+```
+
 ---
 
 ## GNN Risk Layer (Proves_AI)
@@ -66,6 +80,17 @@ The truth graph is the training substrate for a graph neural network risk model:
 - GraphSAGE for cascade and graph risk scoring
 - XGBoost baseline for mission success prediction
 - Cross-encoder reranker for retrieval quality
+
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart LR
+  Graph[(Truth Graph)] --> Features[Feature Builder]
+  Features --> GNN[GraphSAGE]
+  Features --> XGB[XGBoost Baseline]
+  GNN --> Risk[Risk Scores]
+  XGB --> Risk
+  Risk --> Alerts[Mission Ops Alerts]
+```
 
 See the scaffold repo: https://github.com/Lizo-RoadTown/Proves_AI
 

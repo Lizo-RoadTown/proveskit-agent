@@ -27,6 +27,16 @@ PROVES Kit Agent is a living testbed for agentic knowledge capture, human verifi
 - Human review decisions create labeled data for evaluation
 - The truth graph provides ground truth for GNN training
 
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart TB
+  Runs[Curator Runs] --> Labels[Human Labels]
+  Labels --> Graph[(Truth Graph)]
+  Graph --> GNN[GraphSAGE Training]
+  GNN --> Metrics[Risk Metrics]
+  Metrics --> Eval[Evaluation Reports]
+```
+
 ---
 
 ## Proves_AI (GNN and ML Stack)

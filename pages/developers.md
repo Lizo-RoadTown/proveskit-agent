@@ -28,6 +28,17 @@ python view_progress.py
 python check_environment.py
 ```
 
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart LR
+  Docs[Docs and Repos] --> Curator[Curator Agent]
+  Curator --> Staging[Staging Tables]
+  Staging --> Review[Human Review]
+  Review --> Graph[(Truth Graph)]
+  Graph --> MCP[MCP Server]
+  MCP --> Tools[VS Code and CLI]
+```
+
 ---
 
 ## Use the MCP Server

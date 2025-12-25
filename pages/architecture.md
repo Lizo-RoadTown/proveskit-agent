@@ -64,6 +64,27 @@ flowchart TB
 
 ---
 
+## MCP Query Lifecycle
+
+```mermaid
+sequenceDiagram
+  participant User as CubeSat Team
+  participant UI as VS Code or CLI
+  participant MCP as MCP Server
+  participant Graph as Truth Graph
+  participant RAG as RAG Docs
+
+  User->>UI: Ask dependency question
+  UI->>MCP: Query
+  MCP->>Graph: Graph lookup
+  MCP->>RAG: Retrieve docs
+  Graph-->>MCP: Relationships + evidence
+  RAG-->>MCP: Supporting excerpts
+  MCP-->>UI: Structured answer
+```
+
+---
+
 ## Truth Layer Pipeline
 
 Only human-verified facts enter the truth graph.
@@ -77,6 +98,21 @@ flowchart TB
   D --> E[Human Verification]
   E --> F[Truth Graph]
   F --> G[GNN Risk Layer]
+```
+
+---
+
+## Cascade Analysis Flow
+
+```mermaid
+%%{init: {'flowchart': {'defaultRenderer': 'elk'}}}%%
+flowchart TB
+  Q[User Question] --> Router[Router Agent]
+  Router --> Cascade[Cascade Analyzer]
+  Cascade --> Graph[(Truth Graph)]
+  Graph --> Paths[Dependency Paths]
+  Paths --> Evidence[Evidence Gaps]
+  Evidence --> MCP[MCP Response]
 ```
 
 ---
